@@ -13,16 +13,19 @@
 rm */migrations/00001_initial.py
 python3 manage.py makemigrations
 python3 manage.py migrate
-
 python3 manage.py runserver
 ```
 
 
 ## 部署
 
-``` 
-uwsgi --http :8001 --chdir ./ --home=./venv  --module KnowGraphAPI.wsgi
-```
+安装uwsgi,注意它不是安装在虚拟环境中，而是安装在系统中  
+`sudo pip install uwsgi --upgrade`
+
+后台运行  
+`nohup uwsgi --http :8000 --chdir ./ --home=./venv  --module KnowGraphAPI.wsgi  &`  
+查看输出  
+`tail -f nohup.out`
 
 ## 常用命令
 
