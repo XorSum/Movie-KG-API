@@ -23,3 +23,21 @@ python3 manage.py runserver
 ``` 
 uwsgi --http :8001 --chdir ./ --home=./venv  --module KnowGraphAPI.wsgi
 ```
+
+## 常用命令
+
+### vnev
+
+创建虚拟环境  
+`python3 -m venv venv`  
+启动虚拟环境  
+`source venv/bin/activate`  
+
+
+
+### requirements.txt
+
+生成requirements.txt文件  
+`pip freeze > requirements.txt`  
+安装requirements.txt依赖  
+`pip install -r requirements.txt`  
