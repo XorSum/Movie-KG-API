@@ -121,4 +121,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-FUSEKI_ENDPOINT_URL = 'http://121.249.146.175:3030/kg_demo_movie/query'
+FUSEKI_ENDPOINT_URL = 'http://127.0.0.1:3030/kg_demo_movie/query'
+
+external_dict = ['./utils/external_dict/movie_title.txt', './utils/external_dict/person_name.txt']
+

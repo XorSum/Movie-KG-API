@@ -10,12 +10,12 @@ class FusekiClient:
         self.sparql_conn = SPARQLWrapper.SPARQLWrapper(FUSEKI_ENDPOINT_URL)
         self.sparql_conn.setReturnFormat(JSON)
 
-    def query_results(self, sql):
+    def query_results(self, statement):
         self.sparql_conn.setQuery(statement)
         results = self.sparql_conn.query().convert()
         return results
 
-    def query_values(self, sql):
+    def query_values(self, statement):
         self.sparql_conn.setQuery(statement)
         results = self.sparql_conn.query().convert()
         values = []
