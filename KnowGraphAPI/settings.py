@@ -25,7 +25,7 @@ SECRET_KEY = 'jubjn63dr816u91is6&ndfa1dbjsa=*8c(ki%#(6e8amcbg^8_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['editme.top']
 
 
 # Application definition

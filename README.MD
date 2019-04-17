@@ -32,7 +32,8 @@ uwsgi --http :8001 --chdir ./ --home=./venv  --module KnowGraphAPI.wsgi
 `python3 -m venv venv`  
 启动虚拟环境  
 `source venv/bin/activate`  
-
+退出虚拟环境  
+`deactivate`
 
 
 ### requirements.txt
