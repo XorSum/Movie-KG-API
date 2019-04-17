@@ -7,11 +7,31 @@ ami = AMI()
 def hello(request):
     return HttpResponse("hello world")
 
-def query(request):
-    question = request.GET.get('q')
+def search(request):
+    question = request.GET.get('question')
     answer = ami.query(question)
     print(answer)
     return HttpResponse(str(answer))
+
+
+def relationTo(request):
+    question = request.GET.get('subject')
+    answer = ami.relationTo(question)
+    print(answer)
+    return HttpResponse(str(answer))
+
+def relationFrom(request):
+    question = request.GET.get('object')
+    answer = ami.relationFrom(question)
+    print(answer)
+    return HttpResponse(str(answer))
+
+def getUrl(request):
+    question = request.GET.get('name')
+    answer = ami.getUrl(question)
+    print(answer)
+    return HttpResponse(str(answer))
+
 
 
 def help(request):

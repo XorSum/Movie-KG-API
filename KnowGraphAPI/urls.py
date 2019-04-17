@@ -20,6 +20,9 @@ from rdf import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/',views.hello),
-    path('search/',views.query),
+    path('search/',views.search),
     path('help/',views.help),
+    path('relationTo/', views.relationTo),
+    path('relationFrom/', views.relationFrom),
+    path('getUrl/', views.getUrl),
 ]

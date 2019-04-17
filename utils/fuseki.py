@@ -11,18 +11,24 @@ class FusekiClient:
         self.sparql_conn.setReturnFormat(JSON)
 
     def query_results(self, statement):
-        self.sparql_conn.setQuery(statement)
-        results = self.sparql_conn.query().convert()
-        return results
+        try:
+            self.sparql_conn.setQuery(statement)
+            results = self.sparql_conn.query().convert()
+            return results
+        except:
+            return None
 
     def query_values(self, statement):
-        self.sparql_conn.setQuery(statement)
-        results = self.sparql_conn.query().convert()
-        values = []
-        for result in results["results"]["bindings"]:
-            for key in results["head"]["vars"]:
-                values.append(result[key]["value"])
-        return values
+        try:
+            self.sparql_conn.setQuery(statement)
+            results = self.sparql_conn.query().convert()
+            values = []
+            for result in results["results"]["bindings"]:
+                for key in results["head"]["vars"]:
+                    values.append(result[key]["value"])
+            return values
+        except:
+            return None
 
 #  用于测试
 if __name__ == '__main__':
