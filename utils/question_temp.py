@@ -19,7 +19,7 @@ import re
 
 # TODO SPARQL前缀和模板
 SPARQL_PREXIX = """
-PREFIX : <http://www.kgdemo.com#>
+PREFIX : <http://editme.top#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 """

@@ -27,7 +27,7 @@ class FusekiClient:
 #  用于测试
 if __name__ == '__main__':
     statement = """
-    PREFIX : <http://www.kgdemo.com#>
+    PREFIX : <http://editme.top#>
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     SELECT DISTINCT ?x WHERE {
