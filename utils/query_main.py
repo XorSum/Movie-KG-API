@@ -91,7 +91,7 @@ class AMI:
             print(sql)
             result = self.fuseki.query_results(sql)
             print(result)
-            ans = [i['object']['value'] for i in result['results']['bindings']]
+            ans = result['results']['bindings'][0]['object']['value']
             print(ans)
             return ans
         except Exception as e:
