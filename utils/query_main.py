@@ -3,6 +3,7 @@ from utils.Question2Sparql import Question2Sparql
 from KnowGraphAPI import settings
 from utils.question_temp import SPARQL_PREXIX
 
+URL_PREFIX = "http://editme.top#"
 
 class AMI:
     """
@@ -30,44 +31,54 @@ class AMI:
             return "error"
 
     def relationTo(self, subject):
-
-        SPARQL_SELECT_TEM = "{prefix}\n" \
-                            "SELECT DISTINCT ?predicate  ?object WHERE {{\n" \
-                            "<{subject}>  ?predicate  ?object.\n" \
-                            "}}\n"
-        sql = SPARQL_SELECT_TEM.format(prefix=SPARQL_PREXIX, subject=subject)
-        print(sql)
-        result = self.fuseki.query_results(sql)
-        return result
-
+        try:
+            SPARQL_SELECT_TEM = "{prefix}\n" \
+                                "SELECT DISTINCT ?predicate  ?object WHERE {{\n" \
+                                "<{subject}>  ?predicate  ?object.\n" \
+                                "}}\n"
+            sql = SPARQL_SELECT_TEM.format(prefix=SPARQL_PREXIX, subject=URL_PREFIX+subject)
+            print(sql)
+            result = self.fuseki.query_results(sql)
+            return result
+        except Exception as e:
+            print(e)
+            return "error"
     def relationFrom(self, object):
-
-        SPARQL_SELECT_TEM = "{prefix}\n" \
-                            "SELECT DISTINCT  ?subject ?predicate  WHERE {{\n" \
-                            "?subject  ?predicate  <{object}>.\n" \
-                            "}}\n"
-        sql = SPARQL_SELECT_TEM.format(prefix=SPARQL_PREXIX, object=object)
-        result = self.fuseki.query_results(sql)
-        return result
-
+        try:
+            SPARQL_SELECT_TEM = "{prefix}\n" \
+                                "SELECT DISTINCT  ?subject ?predicate  WHERE {{\n" \
+                                "?subject  ?predicate  <{object}>.\n" \
+                                "}}\n"
+            sql = SPARQL_SELECT_TEM.format(prefix=SPARQL_PREXIX, object=URL_PREFIX+object)
+            result = self.fuseki.query_results(sql)
+            return result
+        except Exception as e:
+            print(e)
+            return "error"
     def getUrl(self, value):
-
-        SPARQL_SELECT_TEM = "{prefix}\n" \
-                            "SELECT DISTINCT  ?subject  WHERE {{\n" \
-                            "{{?subject  :personName  '{value}'.}} UNION \n " \
-                            "{{?subject  :movieTitle  '{value}'.}} UNION \n " \
-                            "{{?subject  :genreName   '{value}'.}}  \n " \
-                            "}}\n"
-        sql = SPARQL_SELECT_TEM.format(prefix=SPARQL_PREXIX, value=value)
-        result = self.fuseki.query_results(sql)
-        return result
-
+        try:
+            SPARQL_SELECT_TEM = "{prefix}\n" \
+                                "SELECT DISTINCT  ?subject  WHERE {{\n" \
+                                "{{?subject  :personName  '{value}'.}} UNION \n " \
+                                "{{?subject  :movieTitle  '{value}'.}} UNION \n " \
+                                "{{?subject  :genreName   '{value}'.}}  \n " \
+                                "}}\n"
+            sql = SPARQL_SELECT_TEM.format(prefix=SPARQL_PREXIX, value=value)
+            result = self.fuseki.query_results(sql)
+            print(result)
+            result = result['results']['bindings'][0]['subject']['value']
+            print(result)
+            result = result[18:]
+            return result
+        except Exception as e:
+            print(e)
+            return "error"
 
 # 用于测试
 if __name__ == '__main__':
     external_dict = ['./external_dict/movie_title.txt', './external_dict/person_name.txt']
     ami = AMI(external_dict)
     print(ami.query("周星驰出演的电影"))
-    print(ami.relationTo("http://editme.top#movie/231017"))
-    print(ami.relationFrom("http://editme.top#movie/231017"))
+    print(ami.relationTo("movie/231017"))
+    print(ami.relationFrom("movie/231017"))
     print(ami.getUrl("周星驰"))

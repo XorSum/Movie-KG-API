@@ -5,17 +5,23 @@
 
 访问 `http://localhost:8000/help/` 查看支持的问题
 
-访问`http://localhost:8000/search/?q=周星驰出演的电影`进行询问
+访问`http://localhost:8000/search/?question=周星驰出演的电影`进行询问
 
 ```
+
 /getUrl/?name=周星驰
+response :  "person/57607"
 
-{'head': {'vars': ['subject']}, 'results': {'bindings': [{'subject': {'type': 'uri', 'value': 'http://editme.top#person/57607'}}]}}
 
-/relationFrom/?object='http://editme.top#person/57607'
 
-/relationTo/?subbject='http://editme.top#movie/55156'
+/relationFrom/?object=person/57607
+
+/relationTo/?subject=movie/55156
 ```
+
+subject predicate object
+主      谓         宾
+
 
 
 ## 测试运行
