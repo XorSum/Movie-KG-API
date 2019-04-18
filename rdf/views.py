@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from utils.query_main import AMI
 from urllib import parse
+import json
 
 ami = AMI()
 
@@ -13,7 +14,7 @@ def search(request):
     question = parse.unquote(question)
     answer = ami.query(question)
     print(answer)
-    return HttpResponse(str(answer))
+    return HttpResponse(json.dumps(answer))
 
 
 def relationTo(request):
@@ -21,28 +22,28 @@ def relationTo(request):
     question = parse.unquote(question)
     answer = ami.relationTo(question)
     print(answer)
-    return HttpResponse(str(answer))
+    return HttpResponse(json.dumps(answer))
 
 def relationFrom(request):
     question = request.GET.get('object')
     question = parse.unquote(question)
     answer = ami.relationFrom(question)
     print(answer)
-    return HttpResponse(str(answer))
+    return HttpResponse(json.dumps(answer))
 
 def getUrl(request):
     question = request.GET.get('name')
     question = parse.unquote(question)
     answer = ami.getUrl(question)
     print(answer)
-    return HttpResponse(str(answer))
+    return HttpResponse(json.dumps(answer))
 
 def getName(request):
     question = request.GET.get('url')
     question = parse.unquote(question)
     answer = ami.getName(question)
     # print(answer)
-    return HttpResponse(str(answer))
+    return HttpResponse(json.dumps(answer))
 
 
 

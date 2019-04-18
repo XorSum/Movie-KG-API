@@ -25,7 +25,7 @@ SECRET_KEY = 'jubjn63dr816u91is6&ndfa1dbjsa=*8c(ki%#(6e8amcbg^8_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','editme.top']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -44,13 +44,16 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsPostCsrfMiddleware',    
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True  
 
 ROOT_URLCONF = 'KnowGraphAPI.urls'
 
@@ -126,4 +129,9 @@ STATIC_URL = '/static/'
 FUSEKI_ENDPOINT_URL = 'http://127.0.0.1:3030/kg_demo_movie/query'
 
 external_dict = ['./utils/external_dict/movie_title.txt', './utils/external_dict/person_name.txt']
+
+
+
+
+
 
