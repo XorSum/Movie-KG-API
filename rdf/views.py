@@ -37,6 +37,14 @@ def getUrl(request):
     print(answer)
     return HttpResponse(str(answer))
 
+def getName(request):
+    question = request.GET.get('url')
+    question = parse.unquote(question)
+    answer = ami.getName(question)
+    # print(answer)
+    return HttpResponse(str(answer))
+
+
 
 
 def help(request):

@@ -17,7 +17,7 @@ class AMI:
     def query(self, question):
         try:
             my_query = self.q2s.get_sparql(question)
-            # print(my_query)
+            print(my_query)
             if my_query != None:
                 result = self.fuseki.query_values(my_query)
                 if (len(result) == 0):
@@ -39,6 +39,7 @@ class AMI:
             sql = SPARQL_SELECT_TEM.format(prefix=SPARQL_PREXIX, subject=subject)
             print(sql)
             result = self.fuseki.query_results(sql)
+            print(result)
             return result
         except Exception as e:
             print(e)
@@ -51,7 +52,9 @@ class AMI:
                                 "?subject  ?predicate  <{object}>.\n" \
                                 "}}\n"
             sql = SPARQL_SELECT_TEM.format(prefix=SPARQL_PREXIX, object=object)
+            print(sql)
             result = self.fuseki.query_results(sql)
+            print(result)
             return result
         except Exception as e:
             print(e)
@@ -66,6 +69,7 @@ class AMI:
                                 "{{?subject  :genreName   '{value}'.}}  \n " \
                                 "}}\n"
             sql = SPARQL_SELECT_TEM.format(prefix=SPARQL_PREXIX, value=value)
+            print(sql)
             result = self.fuseki.query_results(sql)
             print(result)
             result = result['results']['bindings'][0]['subject']['value']
@@ -75,11 +79,32 @@ class AMI:
             print(e)
             return "error"
 
+    def getName(self, value):
+        try:
+            SPARQL_SELECT_TEM = "{prefix}\n" \
+                                "SELECT DISTINCT  ?object  WHERE {{\n" \
+                                "{{<{value}>  :personName  ?object.}} UNION \n " \
+                                "{{<{value}>  :movieTitle  ?object.}} UNION \n " \
+                                "{{<{value}>  :genreName   ?object.}}  \n " \
+                                "}}\n"
+            sql = SPARQL_SELECT_TEM.format(prefix=SPARQL_PREXIX, value=value)
+            print(sql)
+            result = self.fuseki.query_results(sql)
+            print(result)
+            ans = [i['object']['value'] for i in result['results']['bindings']]
+            print(ans)
+            return ans
+        except Exception as e:
+            print(e)
+            return "error"
+
+
 # 用于测试
 if __name__ == '__main__':
     external_dict = ['./external_dict/movie_title.txt', './external_dict/person_name.txt']
     ami = AMI(external_dict)
     print(ami.query("周星驰出演的电影"))
-    print(ami.relationTo("movie/231017"))
-    print(ami.relationFrom("movie/231017"))
+    print(ami.relationTo("http://editme.top#movie/231017"))
+    print(ami.relationFrom("http://editme.top#movie/231017"))
     print(ami.getUrl("周星驰"))
+    print(ami.getName("http://editme.top#movie/231017"))

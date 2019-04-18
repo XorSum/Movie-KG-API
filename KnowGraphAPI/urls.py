@@ -25,4 +25,5 @@ urlpatterns = [
     path('relationTo/', views.relationTo),
     path('relationFrom/', views.relationFrom),
     path('getUrl/', views.getUrl),
+    path('getName/', views.getName),
 ]
