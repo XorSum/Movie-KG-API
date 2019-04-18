@@ -3,7 +3,7 @@ from utils.Question2Sparql import Question2Sparql
 from KnowGraphAPI import settings
 from utils.question_temp import SPARQL_PREXIX
 
-URL_PREFIX = "http://editme.top#"
+# URL_PREFIX = "http://editme.top#"
 
 class AMI:
     """
@@ -36,25 +36,27 @@ class AMI:
                                 "SELECT DISTINCT ?predicate  ?object WHERE {{\n" \
                                 "<{subject}>  ?predicate  ?object.\n" \
                                 "}}\n"
-            sql = SPARQL_SELECT_TEM.format(prefix=SPARQL_PREXIX, subject=URL_PREFIX+subject)
+            sql = SPARQL_SELECT_TEM.format(prefix=SPARQL_PREXIX, subject=subject)
             print(sql)
             result = self.fuseki.query_results(sql)
             return result
         except Exception as e:
             print(e)
             return "error"
+
     def relationFrom(self, object):
         try:
             SPARQL_SELECT_TEM = "{prefix}\n" \
                                 "SELECT DISTINCT  ?subject ?predicate  WHERE {{\n" \
                                 "?subject  ?predicate  <{object}>.\n" \
                                 "}}\n"
-            sql = SPARQL_SELECT_TEM.format(prefix=SPARQL_PREXIX, object=URL_PREFIX+object)
+            sql = SPARQL_SELECT_TEM.format(prefix=SPARQL_PREXIX, object=object)
             result = self.fuseki.query_results(sql)
             return result
         except Exception as e:
             print(e)
             return "error"
+
     def getUrl(self, value):
         try:
             SPARQL_SELECT_TEM = "{prefix}\n" \
@@ -68,7 +70,6 @@ class AMI:
             print(result)
             result = result['results']['bindings'][0]['subject']['value']
             print(result)
-            result = result[18:]
             return result
         except Exception as e:
             print(e)
