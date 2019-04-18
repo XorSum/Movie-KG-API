@@ -12,7 +12,7 @@
 /getUrl/?name=周星驰
 response :  "person/57607"
 
-
+encodeURIComponent(#)
 
 /relationFrom/?object=person/57607
 
