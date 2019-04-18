@@ -7,21 +7,21 @@
 
 访问`http://localhost:8000/search/?question=周星驰出演的电影`进行询问
 
+以下get接口均需encodeURIComponent()
 ```
+http://localhost:8000/search/?question=
 
 /getUrl/?name=周星驰
-response :  "person/57607"
+response :  "http://editme.top#movie/9470"
 
-encodeURIComponent(#)
 
-/relationFrom/?object=person/57607
+/relationFrom/?object=
 
-/relationTo/?subject=movie/55156
+/relationTo/?subject=
 ```
 
 subject predicate object
 主      谓         宾
-
 
 
 ## 测试运行
