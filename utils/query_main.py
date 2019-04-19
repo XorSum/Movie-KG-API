@@ -65,6 +65,7 @@ class AMI:
             SPARQL_SELECT_TEM = "{prefix}\n" \
                                 "SELECT DISTINCT  ?subject  WHERE {{\n" \
                                 "{{?subject  :personName  '{value}'.}} UNION \n " \
+                                "{{?subject  :personEnglishName  '{value}'.}} UNION \n " \
                                 "{{?subject  :movieTitle  '{value}'.}} UNION \n " \
                                 "{{?subject  :genreName   '{value}'.}}  \n " \
                                 "}}\n"
@@ -84,6 +85,7 @@ class AMI:
             SPARQL_SELECT_TEM = "{prefix}\n" \
                                 "SELECT DISTINCT  ?object  WHERE {{\n" \
                                 "{{<{value}>  :personName  ?object.}} UNION \n " \
+                                "{{<{value}>  :personEnglishName  ?object.}} UNION \n " \
                                 "{{<{value}>  :movieTitle  ?object.}} UNION \n " \
                                 "{{<{value}>  :genreName   ?object.}}  \n " \
                                 "}}\n"
