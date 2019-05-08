@@ -1,5 +1,8 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.contrib.auth.models import User, Group
+from django.http import HttpResponse, JsonResponse
+from rest_framework import viewsets
+
+from rdf.serializers import UserSerializer, GroupSerializer
 from utils.query_main import AMI
 from urllib import parse
 import json
@@ -7,7 +10,7 @@ import json
 ami = AMI()
 
 def hello(request):
-    return HttpResponse("hello world")
+    return JsonResponse({'result': 200, 'msg': '连接成功'})
 
 def search(request):
     question = request.GET.get('question')
@@ -62,3 +65,20 @@ def help(request):
 10. 某电影的简介/上映日期/评分
 """
     return HttpResponse(s)
+
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer

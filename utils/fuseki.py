@@ -1,7 +1,7 @@
 import SPARQLWrapper
 from SPARQLWrapper import JSON
 
-from KnowGraphAPI.settings import FUSEKI_ENDPOINT_URL
+from MovieKgAPI.settings import FUSEKI_ENDPOINT_URL
 
 
 class FusekiClient:

@@ -1,6 +1,6 @@
 from utils.fuseki import FusekiClient
 from utils.Question2Sparql import Question2Sparql
-from KnowGraphAPI import settings
+from MovieKgAPI import settings
 from utils.question_temp import SPARQL_PREXIX
 
 # URL_PREFIX = "http://editme.top#"
