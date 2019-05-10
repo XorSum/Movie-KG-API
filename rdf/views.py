@@ -49,8 +49,12 @@ def getName(request):
     # print(answer)
     return HttpResponse(json.dumps(answer))
 
-
-
+def register(request):
+    username = request.GET['username']
+    email = request.GET['email']
+    password = request.GET['password']
+    user = User.objects.create_user(username,email,password)
+    return HttpResponse('ok')
 
 def help(request):
     s = """    
