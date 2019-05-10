@@ -2,8 +2,8 @@ from django.contrib.auth.models import Group
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
 
-from rdf.models import Movie, MyUser
-from rdf.serializers import UserSerializer, GroupSerializer, MovieSerializer
+from rdf.models import Movie, MyUser, Article
+from rdf.serializers import UserSerializer, GroupSerializer, MovieSerializer, ArticleSerializer
 from utils.query_main import AMI
 from urllib import parse
 import json
@@ -89,3 +89,7 @@ class MovieViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
 
+
+class ArticleViewSet(viewsets.ModelViewSet):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
