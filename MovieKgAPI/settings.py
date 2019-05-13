@@ -132,3 +132,12 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'rdf.MyUser'
+
+# MONGODB_URI = "mongodb://movie_lion:movie_lion@editme.top:27017/"
+
+# MONGO_HOST = "editme.top"
+# MONGO_USER = "movie_lion"
+# MONGO_PWD = "movie_lion"
+MONGO_HOST = "localhost"
+MONGO_PORT = 27017
+MONGO_DB = "movie_lion"

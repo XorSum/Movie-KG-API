@@ -2,6 +2,8 @@ from django.contrib.auth.models import Group
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
 
+# from MovieKgAPI.settings import MONGODB_URI
+from MovieKgAPI.settings import MONGO_HOST, MONGO_PORT, MONGO_DB
 from rdf.models import Movie, MyUser, Article
 from rdf.serializers import UserSerializer, GroupSerializer, MovieSerializer, ArticleSerializer
 from utils.query_main import AMI
@@ -10,7 +12,10 @@ import json
 import pymongo
 
 ami = AMI()
-mongoclient=pymongo.MongoClient(host='localhost',port=27017)
+# mongoclient=pymongo.MongoClient(MONGODB_URI)
+mongoclient = pymongo.MongoClient(host=MONGO_HOST, port=MONGO_PORT)
+mongo_db = mongoclient[MONGO_DB]
+# mongo_db.authenticate(name=MONGO_USER,password=MONGO_PWD)
 
 def hello(request):
     return JsonResponse({'result': 200, 'msg': '连接成功'})
@@ -62,7 +67,7 @@ def getDbMovie(request):
     try:
         id = request.GET['id']
         print(id)
-        collection = mongoclient['movie_lion']['movie']
+        collection = mongo_db['movie']
         movie = collection.find_one({'_id':str(id)})
         # return HttpResponse(json.dumps(movie))
         return JsonResponse(movie)
@@ -72,11 +77,13 @@ def getDbMovie(request):
 def getDbPerson(request):
     try:
         id = request.GET['id']
-        collection = mongoclient['movie_lion']['person']
+        print(id)
+        collection = mongo_db['person']
         person = collection.find_one({'_id': str(id)})
         # return HttpResponse(json.dumps(person))
         return JsonResponse(person)
-    except:
+    except Exception as e:
+        print(repr(e))
         return HttpResponse('error')
 
 def help(request):
