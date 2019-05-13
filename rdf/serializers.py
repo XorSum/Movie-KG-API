@@ -7,7 +7,6 @@ from rdf.models import Movie
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     articles = serializers.PrimaryKeyRelatedField(many=True,queryset=Article.objects.all())
-    # articles = serializers.StringRelatedField(many=True)
     class Meta:
         model = MyUser
         fields = ('url', 'username', 'email', 'groups','abc','friends','articles')

@@ -36,6 +36,8 @@ urlpatterns = [
     path('getUrl/', views.getUrl),
     path('getName/', views.getName),
     path('register/',views.register),
+    path('getDbMovie/', views.getDbMovie),
+    path('getDbPerson/', views.getDbPerson),
     path('api/v2/',include(router.urls)),
     re_path(r'api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

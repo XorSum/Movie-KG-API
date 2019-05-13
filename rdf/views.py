@@ -7,8 +7,10 @@ from rdf.serializers import UserSerializer, GroupSerializer, MovieSerializer, Ar
 from utils.query_main import AMI
 from urllib import parse
 import json
+import pymongo
 
 ami = AMI()
+mongoclient=pymongo.MongoClient(host='localhost',port=27017)
 
 def hello(request):
     return JsonResponse({'result': 200, 'msg': '连接成功'})
@@ -53,8 +55,20 @@ def register(request):
     username = request.GET['username']
     email = request.GET['email']
     password = request.GET['password']
-    user = User.objects.create_user(username,email,password)
+    user = MyUser.objects.create_user(username,email,password)
     return HttpResponse('ok')
+
+def getDbMovie(request):
+    id = request.GET['id']
+    collection = mongoclient['complete_douban']['movie']
+    movie = collection.find_one({'_id':id})
+    return JsonResponse(movie)
+
+def getDbPerson(request):
+    id = request.GET['id']
+    collection = mongoclient['complete_douban']['person']
+    person = collection.find_one({'_id': id})
+    return JsonResponse(person)
 
 def help(request):
     s = """    
