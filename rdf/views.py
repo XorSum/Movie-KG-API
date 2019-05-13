@@ -59,16 +59,25 @@ def register(request):
     return HttpResponse('ok')
 
 def getDbMovie(request):
-    id = request.GET['id']
-    collection = mongoclient['complete_douban']['movie']
-    movie = collection.find_one({'_id':id})
-    return JsonResponse(movie)
+    try:
+        id = request.GET['id']
+        print(id)
+        collection = mongoclient['movie_lion']['movie']
+        movie = collection.find_one({'_id':str(id)})
+        # return HttpResponse(json.dumps(movie))
+        return JsonResponse(movie)
+    except :
+        return HttpResponse('error')
 
 def getDbPerson(request):
-    id = request.GET['id']
-    collection = mongoclient['complete_douban']['person']
-    person = collection.find_one({'_id': id})
-    return JsonResponse(person)
+    try:
+        id = request.GET['id']
+        collection = mongoclient['movie_lion']['person']
+        person = collection.find_one({'_id': str(id)})
+        # return HttpResponse(json.dumps(person))
+        return JsonResponse(person)
+    except:
+        return HttpResponse('error')
 
 def help(request):
     s = """    
