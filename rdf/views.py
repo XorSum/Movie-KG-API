@@ -65,25 +65,30 @@ def register(request):
 
 def getDbMovie(request):
     try:
-        id = request.GET['id']
-        print(id)
         collection = mongo_db['movie']
-        movie = collection.find_one({'_id':str(id)})
-        # return HttpResponse(json.dumps(movie))
+        if request.GET.dict().get('id') != None:
+            id = request.GET['id']
+            movie = collection.find_one({'_id':str(id)})
+        else :
+            title = request.GET['title']
+            movie = collection.find_one({'title': str(title)})
         return JsonResponse(movie)
-    except :
+    except Exception as e:
+        # print(repr(e))
         return HttpResponse('error')
 
 def getDbPerson(request):
     try:
-        id = request.GET['id']
-        print(id)
         collection = mongo_db['person']
-        person = collection.find_one({'_id': str(id)})
-        # return HttpResponse(json.dumps(person))
+        if request.GET.dict().get('id') != None:
+            id = request.GET['id']
+            person = collection.find_one({'_id':str(id)})
+        else :
+            name = request.GET['name']
+            person = collection.find_one({'name': str(name)})
         return JsonResponse(person)
     except Exception as e:
-        print(repr(e))
+        # print(repr(e))
         return HttpResponse('error')
 
 def help(request):

@@ -3,6 +3,12 @@
 
 ## 使用
 
+/api/v3/person/?id=1274242
+/api/v3/person/?name=黄渤
+/api/v3/movie/?id=1291543
+/api/v3/movie/?title=功夫
+
+
 访问 `http://localhost:8000/help/` 查看支持的问题
 
 访问`http://localhost:8000/search/?question=周星驰出演的电影`进行询问
@@ -41,7 +47,7 @@ python3 manage.py runserver
 `sudo pip install uwsgi --upgrade`
 
 后台运行  
-`nohup uwsgi --http :8000 --chdir ./ --home=./venv  --module KnowGraphAPI.wsgi  &`  
+`nohup uwsgi --http :8000 --chdir ./ --home=./venv  --module MovieKgAPI.wsgi  &`
 查看输出  
 `tail -f nohup.out`
 
