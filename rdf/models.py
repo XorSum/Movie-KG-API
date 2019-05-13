@@ -8,16 +8,8 @@ from MovieKgAPI import settings
 
 
 class MyUser(AbstractUser):
-    abc = models.CharField(max_length=100)
-    friends = models.ManyToManyField(settings.AUTH_USER_MODEL)
-
-
-class Movie(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=300)
-
-    def __str__(self):
-        return "{" + str(self.id) + ":" + str(self.name) + "}"
+    abc = models.CharField(max_length=100,blank=True,null=True)
+    friends = models.ManyToManyField(settings.AUTH_USER_MODEL,blank=True,null=True)
 
 
 # class Favorites(models.Model):

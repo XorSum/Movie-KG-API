@@ -117,3 +117,5 @@ dmypy.json
 
 # PyCharm
 .idea/
+
+nohup.out

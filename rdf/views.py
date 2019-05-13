@@ -4,8 +4,8 @@ from rest_framework import viewsets
 
 # from MovieKgAPI.settings import MONGODB_URI
 from MovieKgAPI.settings import MONGO_HOST, MONGO_PORT, MONGO_DB
-from rdf.models import Movie, MyUser, Article
-from rdf.serializers import UserSerializer, GroupSerializer, MovieSerializer, ArticleSerializer
+from rdf.models import MyUser, Article
+from rdf.serializers import UserSerializer, GroupSerializer, ArticleSerializer
 from utils.query_main import AMI
 from urllib import parse
 import json
@@ -124,9 +124,9 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
 
 
-class MovieViewSet(viewsets.ModelViewSet):
-    queryset = Movie.objects.all()
-    serializer_class = MovieSerializer
+# class MovieViewSet(viewsets.ModelViewSet):
+#     queryset = Movie.objects.all()
+#     serializer_class = MovieSerializer
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
