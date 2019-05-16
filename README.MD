@@ -13,9 +13,9 @@ get接口均需将参数encodeURIComponent()
 
 /api/v3/movie/?title=功夫
 
-http://localhost:8000/admin/  django控制台
+/api/v2/  RESTful API
 
-http://localhost:8000/api/v2/  RESTful API
+/admin/  django控制台
 
 ------
 
@@ -43,6 +43,7 @@ subject predicate object
 rm */migrations/00001_initial.py
 python3 manage.py makemigrations
 python3 manage.py migrate
+python3 manage.py createsuperuser
 python3 manage.py runserver
 ```
 
