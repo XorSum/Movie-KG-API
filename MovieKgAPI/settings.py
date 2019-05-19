@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'rdf',
     'corsheaders',
     'rest_framework',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -46,13 +47,15 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_HEADERS = ('*',)
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'MovieKgAPI.urls'
 
@@ -131,7 +134,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10  # 默认page_size
 }
 
-AUTH_USER_MODEL = 'rdf.MyUser'
+AUTH_USER_MODEL = 'users.User'
 
 # MONGODB_URI = "mongodb://movie_lion:movie_lion@editme.top:27017/"
 
