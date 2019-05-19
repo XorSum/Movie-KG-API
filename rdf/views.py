@@ -4,8 +4,6 @@ from rest_framework import viewsets
 
 # from MovieKgAPI.settings import MONGODB_URI
 from MovieKgAPI.settings import MONGO_HOST, MONGO_PORT, MONGO_DB
-from rdf.models import MyUser, Article
-from rdf.serializers import UserSerializer, GroupSerializer, ArticleSerializer
 from utils.query_main import AMI
 from urllib import parse
 import json
@@ -15,10 +13,13 @@ ami = AMI()
 # mongoclient=pymongo.MongoClient(MONGODB_URI)
 mongoclient = pymongo.MongoClient(host=MONGO_HOST, port=MONGO_PORT)
 mongo_db = mongoclient[MONGO_DB]
+
+
 # mongo_db.authenticate(name=MONGO_USER,password=MONGO_PWD)
 
 def hello(request):
     return JsonResponse({'result': 200, 'msg': '连接成功'})
+
 
 def search(request):
     question = request.GET.get('question')
@@ -35,12 +36,14 @@ def relationTo(request):
     print(answer)
     return HttpResponse(json.dumps(answer))
 
+
 def relationFrom(request):
     question = request.GET.get('object')
     question = parse.unquote(question)
     answer = ami.relationFrom(question)
     print(answer)
     return HttpResponse(json.dumps(answer))
+
 
 def getUrl(request):
     question = request.GET.get('name')
@@ -49,6 +52,7 @@ def getUrl(request):
     print(answer)
     return HttpResponse(json.dumps(answer))
 
+
 def getName(request):
     question = request.GET.get('url')
     question = parse.unquote(question)
@@ -56,20 +60,14 @@ def getName(request):
     # print(answer)
     return HttpResponse(json.dumps(answer))
 
-def register(request):
-    username = request.GET['username']
-    email = request.GET['email']
-    password = request.GET['password']
-    user = MyUser.objects.create_user(username,email,password)
-    return HttpResponse('ok')
 
 def getDbMovie(request):
     try:
         collection = mongo_db['movie']
         if request.GET.dict().get('id') != None:
             id = request.GET['id']
-            movie = collection.find_one({'_id':str(id)})
-        else :
+            movie = collection.find_one({'_id': str(id)})
+        else:
             title = request.GET['title']
             movie = collection.find_one({'title': str(title)})
         return JsonResponse(movie)
@@ -77,19 +75,21 @@ def getDbMovie(request):
         # print(repr(e))
         return HttpResponse('error')
 
+
 def getDbPerson(request):
     try:
         collection = mongo_db['person']
         if request.GET.dict().get('id') != None:
             id = request.GET['id']
-            person = collection.find_one({'_id':str(id)})
-        else :
+            person = collection.find_one({'_id': str(id)})
+        else:
             name = request.GET['name']
             person = collection.find_one({'name': str(name)})
         return JsonResponse(person)
     except Exception as e:
         # print(repr(e))
         return HttpResponse('error')
+
 
 def help(request):
     s = """    
@@ -105,31 +105,3 @@ def help(request):
 10. 某电影的简介/上映日期/评分
 """
     return HttpResponse(s)
-
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = MyUser.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
-
-
-class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-
-
-# class MovieViewSet(viewsets.ModelViewSet):
-#     queryset = Movie.objects.all()
-#     serializer_class = MovieSerializer
-
-
-class ArticleViewSet(viewsets.ModelViewSet):
-    queryset = Article.objects.all()
-    serializer_class = ArticleSerializer
-

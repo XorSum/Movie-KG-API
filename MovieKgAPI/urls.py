@@ -15,15 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-from rest_framework import routers
-
 from rdf import views
 
-
-router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'groups', views.GroupViewSet)
-router.register(r'article',views.ArticleViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,8 +27,6 @@ urlpatterns = [
     path('relationFrom/', views.relationFrom),
     path('getUrl/', views.getUrl),
     path('getName/', views.getName),
-    path('register/',views.register),
-    path('api/v2/',include(router.urls)),
     re_path(r'api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/v3/movie/', views.getDbMovie),
     path('api/v3/person/', views.getDbPerson),

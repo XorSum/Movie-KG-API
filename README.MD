@@ -13,8 +13,6 @@ get接口均需将参数encodeURIComponent()
 
 /api/v3/movie/?title=功夫
 
-/api/v2/  RESTful API
-
 /admin/  django控制台
 
 ------
@@ -36,6 +34,27 @@ http://localhost:8000/search/?question=
 subject predicate object  
 主      谓         宾
 
+### User
+
+```plain
+POST /user/join?username=&nickname=&password=
+POST /user/login?username=&password=
+GET /user/<username>/log
+GET /user/<username>/star/list
+GET /user/<username>/star/<username>
+```
+
+#### Article
+
+```plain
+POST /user/<username>/publish?content=
+GET /user/<username>/articles
+GET /user/<username>/article/<post_id>
+```
+
+#### More
+
+[More details](users/requests.http)
 
 ## 测试运行
 

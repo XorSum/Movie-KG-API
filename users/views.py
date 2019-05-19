@@ -62,3 +62,49 @@ def star_list(requests, username):
     return json_response({
         'list': lst
     }, 200)
+
+
+def publish(requests, username):
+    user = get_user_or_none(username)
+    if user is None:
+        return json_response(None, 400, 'Username not exist')
+    content = requests.POST['content']
+    data.Article.objects.create(content=content, user=user)
+    user.article_count += 1
+    user.save()
+    return json_response(None, 201)
+
+
+def article_list(requests, username):
+    user = get_user_or_none(username)
+    if user is None:
+        return json_response(None, 400, 'Username not exist')
+    lst = data.Article.objects.get_queryset().filter(user=user)
+    ret = []
+    for each in lst:
+        ret.append({
+            'post_id': each.post_id,
+            'content': each.content,
+            'date': each.created_date,
+            'user': each.user.username,
+        })
+    return json_response({
+        'articles': ret
+    }, 200)
+
+
+def view_article(requests, username, post_id):
+    user = get_user_or_none(username)
+    if user is None:
+        return json_response(None, 400, 'Username not exist')
+    post = data.Article.objects.get(post_id=post_id)
+    if post.user != user:
+        return json_response(None, 400, {
+            'Article not found'
+        })
+    return json_response({
+        'post_id': post.post_id,
+        'content': post.content,
+        'date': post.created_date,
+        'user': post.user.username,
+    }, 200)
