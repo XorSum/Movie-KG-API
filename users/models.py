@@ -1,46 +1,26 @@
 from django.db import models
-from random import choice
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, nickname, password=None):
-        if not email:
-            raise ValueError('Users must have an email address')
+    def create_user(self, username, nickname, password=None):
+        if not username:
+            raise ValueError('Users must have an username')
 
         user = self.model(
-            email=self.normalize_email(email),
+            username=username,
             nickname=nickname,
         )
 
-        def uuid_generator():
-            uuid_list = [choice('123456789')]
-            for i in range(9):
-                uuid_list.append(choice('0123456789'))
-            return int(''.join(uuid_list))
-
-        global uuid
-        while True:
-            try:
-                uuid = uuid_generator()
-                User.objects.get(username=uuid)
-            except models.ObjectDoesNotExist:
-                break
-
-        user.username = uuid
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, nickname, password):
-        """
-        Creates and saves a superuser with the given email, date of
-        birth and password.
-        """
+    def create_superuser(self, username, nickname, password):
         user = self.create_user(
-            email=email,
-            password=password,
+            username=username,
             nickname=nickname,
+            password=password,
         )
         user.is_admin = True
         user.save(using=self._db)
@@ -48,23 +28,19 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    email = models.EmailField(
-        verbose_name='邮箱',
-        max_length=255,
-        unique=True,
-    )
-    username = models.IntegerField(verbose_name='用户名', primary_key=True, editable=False, unique=True)
+    username = models.CharField(verbose_name='用户名', primary_key=True, editable=False, unique=True, max_length=18)
     nickname = models.CharField(verbose_name='用户昵称', max_length=32)
     is_active = models.BooleanField(verbose_name='用户可用', default=True)
     is_admin = models.BooleanField(verbose_name='管理员用户', default=False)
+    stars = models.ManyToManyField("self")
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['nickname']
 
     def __str__(self):
-        return self.email
+        return self.username
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
