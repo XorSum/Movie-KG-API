@@ -31,4 +31,5 @@ urlpatterns = [
     path('api/v3/movie/', views.getDbMovie),
     path('api/v3/person/', views.getDbPerson),
     path('user/', include('users.urls')),
+    path('movie/',include('movie.urls')),
 ]

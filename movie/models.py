@@ -1,5 +1,5 @@
 from django.db import models
-
+from utils.serializer import to_dict
 
 # Create your models here.
 
@@ -15,6 +15,18 @@ class Movie(models.Model):
     def __str__(self):
         return "Movie: " + self.title + "-" + str(self.id)
 
+    def serialize(self, show_person=False, show_video=False):
+        """
+        序列化
+        """
+        data = to_dict(self, ['id', 'year', 'title', 'rating', 'summary', 'original_title'])
+        data['url'] = '/movie/movie/' + str(self.id) + '/'
+        if show_person:
+            data['persons'] = [mp.serialize(show_person=True) for mp in MoviePerson.objects.filter(movie=self).all()]
+        if show_video:
+            data['videos'] = [video.serialize() for video in MovieVideo.objects.filter(movie=self).all()]
+        return data
+
 
 class Person(models.Model):
     id = models.IntegerField(verbose_name='人编号', primary_key=True, editable=False)
@@ -28,6 +40,13 @@ class Person(models.Model):
     def __str__(self):
         return "Person: " + self.name + "-" + str(self.id)
 
+    def serialize(self, show_movie=False):
+        data = to_dict(self, ['id', 'name', 'gender', 'name_en', 'summary', 'birthday', 'bornplace'])
+        data['url'] = '/movie/person/' + str(self.id) + '/'
+        if show_movie:
+            data['movies'] = [mp.serialize(show_movie=True) for mp in MoviePerson.objects.filter(person=self).all()]
+        return data
+
 
 class MoviePerson(models.Model):
     role = models.CharField(verbose_name='职务', max_length=10, blank=True, null=True)
@@ -37,6 +56,14 @@ class MoviePerson(models.Model):
     def __str__(self):
         return "Movie Person: " + self.movie.title + " - " + self.person.name + " - " + self.role
 
+    def serialize(self, show_movie=False, show_person=False):
+        data = {'role': self.role}
+        if show_person:
+            data['person'] = self.person.serialize()
+        if show_movie:
+            data['movie'] = self.movie.serialize()
+        return data
+
 
 class MovieVideo(models.Model):
     movie = models.ForeignKey(verbose_name='电影', to=Movie, on_delete=models.PROTECT)
@@ -45,6 +72,10 @@ class MovieVideo(models.Model):
 
     def __str__(self):
         return "Movie Video: " + self.movie.title + " - " + self.sample_link
+
+    def serialize(self):
+        data = to_dict(self, ['sample_link', 'source'])
+        return data
 
     class Meta:
         unique_together = ('sample_link', 'movie')
