@@ -15,6 +15,8 @@ get接口均需将参数encodeURIComponent()
 
 /admin/  django控制台
 
+/admin/doc/  django文档
+
 ------
 
 http://localhost:8000/help/  查看支持的问题

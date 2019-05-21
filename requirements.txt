@@ -1,8 +1,10 @@
 Django==2.2
 django-cors-headers==2.5.2
 djangorestframework==3.9.3
+docutils==0.14
 isodate==0.6.0
 jieba==0.39
+mongoengine==0.17.0
 pymongo==3.8.0
 pyparsing==2.4.0
 pytz==2019.1
