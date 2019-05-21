@@ -141,10 +141,6 @@ FUSEKI_ENDPOINT_URL = 'http://127.0.0.1:3030/kg_demo_movie/query'
 
 external_dict = ['./utils/external_dict/movie_title.txt', './utils/external_dict/person_name.txt']
 
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',  # 添加这一行解决，
-    'PAGE_SIZE': 10  # 默认page_size
-}
 
 AUTH_USER_MODEL = 'users.User'
 

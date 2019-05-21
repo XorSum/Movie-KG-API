@@ -1,8 +1,4 @@
-from django.contrib.auth.models import Group
 from django.http import HttpResponse, JsonResponse
-from rest_framework import viewsets
-
-# from MovieKgAPI.settings import MONGODB_URI
 from MovieKgAPI.settings import MONGO_HOST, MONGO_PORT, MONGO_DB
 from utils.query_main import AMI
 from urllib import parse
