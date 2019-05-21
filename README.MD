@@ -79,6 +79,7 @@ $ python3 manage.py runserver
 ```bash
 $ sudo apt install python3 python3-venv git
 $ sudo pip3 install uwsgi
+$ sudo apt-get install libmysqlclient-dev
 ```
 
 启动
@@ -109,3 +110,8 @@ $ tail -fn 20 nohup.out
 `pip freeze > requirements.txt`  
 安装requirements.txt依赖  
 `pip install -r requirements.txt`  
+
+### mysql建库
+```mysql
+CREATRE DATABASE movie_kg CHARACTER SET utf8 COLLATE utf8_general_ci;
+```
