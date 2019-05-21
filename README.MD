@@ -33,10 +33,10 @@ GET /user/<username>/article/<post_id>
 #### Movie
 
 ```plain
-GET /movie/search/?title=
-GET /movie/<movieId>/
-GET /person/search/?name=
-GET /person/<personId>/
+GET /movie/movie/search/?title=
+GET /movie/movie/<movieId>/
+GET /movie/person/search/?name=
+GET /movie/person/<personId>/
 ```
 
 #### More
