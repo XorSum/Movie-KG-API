@@ -92,7 +92,7 @@ server {
 sudo systemctl restart nginx
 ```
 
-这时在浏览器中访问[localhost:8000/admin/](localhost:8000/admin/)，admin页面的css文件加载出来了。
+这时在浏览器中访问[localhost:9000/admin/](localhost:9000/admin/)，admin页面的css文件加载出来了。
 
 ----
 

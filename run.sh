@@ -1,6 +1,6 @@
 #! /bin/bash
 
-port=8001
+port=8000
 
 git pull
 if [ ! -d "./venv" ]; then
