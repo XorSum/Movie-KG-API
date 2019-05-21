@@ -152,3 +152,6 @@ AUTH_USER_MODEL = 'users.User'
 MONGO_HOST = "localhost"
 MONGO_PORT = 27017
 MONGO_DB = "movie_lion"
+
+
+STATIC_ROOT ='/home/wwwroot/Movie-KG/static/static/'
