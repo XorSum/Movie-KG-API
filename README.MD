@@ -80,3 +80,11 @@ $ python3 manage.py runserver
 ```mysql
 CREATRE DATABASE movie_kg CHARACTER SET utf8 COLLATE utf8_general_ci;
 ```
+
+### 多settings文件
+
+不同的settings文件用于不同的环境，MovieKgAPI.settings.dev.py用于开发，MovieKgAPI.settings.prod.py用于生产。
+django会根据DJANGO_SETTINGS_MODULE这个环境变量来加载相应的settings文件，
+阅读[manage.py](./manag.py)中的代码可知，如果没有设置DJANGO_SETTINGS_MODULE，它的默认值是MovieKgAPI.settings.dev。
+我们可以在shell中运行`export DJANGO_SETTINGS_MODULE=MovieKgAPI.settings.prod`来设置这个环境变量。
+也可以用`python manage.py migrate --settings=MovieKgAPI.settings.prod`的方式来指定环境变量。

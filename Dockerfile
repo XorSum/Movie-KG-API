@@ -17,4 +17,6 @@ ADD . /app
 
 EXPOSE 8000
 
+ENV DJANGO_SETTINGS_MODULE MovieKgAPI.settings.prod
+
 ENTRYPOINT ["uwsgi", "--http", ":8000" ,"--chdir", "./",  "--module", "MovieKgAPI.wsgi"]

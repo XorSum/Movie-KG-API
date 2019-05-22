@@ -25,6 +25,11 @@ cd api
 
 现在我们在后端代码中搞事情
 
+设置一个环境变量
+```bash
+export DJANGO_SETTINGS_MODULE=MovieKgAPI.settings.prod
+```
+
 `/home/wwwroot/Movie-KG/api/MovieKgAPI/settings.py`这个文件是后端的配置文件，其中记录着数据库配置等各种信息.
 你可以在其中找到某一行写着`STATIC_ROOT ='/home/wwwroot/Movie-KG/static/static/'`,这是稍后生成django admin所需的静态文件的目标地址，
 如果你没有跟我一样使用`/home/wwwroot/Movie-KG/`目录，而是其它的奇奇怪怪的目录的话，那么你就需要修改这一行了。
