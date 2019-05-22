@@ -138,4 +138,4 @@ MONGO_PORT = 27017
 MONGO_DB = "movie_lion"
 
 
-STATIC_ROOT ='/home/wwwroot/Movie-KG/static/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static/static")
