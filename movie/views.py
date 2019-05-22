@@ -5,7 +5,7 @@ from utils.json_response import json_response
 
 
 def hello(request):
-    return HttpResponse('app movie works!')
+    return HttpResponse('congratulations!')
 
 
 def get_movie(request, movieId):
