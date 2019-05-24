@@ -1,6 +1,6 @@
 from django.urls import path, include
-from users import views
-from users.operation import op_urls
+from User import views
+from User.operation import op_urls
 
 
 urlpatterns = [

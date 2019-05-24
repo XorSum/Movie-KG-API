@@ -3,17 +3,18 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from . import models
+from User.models import User
+from User.Article.models import Article
 
 
 class UserCreationForm(forms.ModelForm):
-    """A form for creating new users. Includes all the required
+    """A form for creating new User. Includes all the required
     fields, plus a repeated password."""
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
 
     class Meta:
-        model = models.User
+        model = User
         fields = ('nickname',)
 
     def clean_password2(self):
@@ -34,14 +35,14 @@ class UserCreationForm(forms.ModelForm):
 
 
 class UserChangeForm(forms.ModelForm):
-    """A form for updating users. Includes all the fields on
+    """A form for updating User. Includes all the fields on
     the user, but replaces the password field with admin's
     password hash display field.
     """
     password = ReadOnlyPasswordHashField()
 
     class Meta:
-        model = models.User
+        model = User
         fields = ('password', 'nickname', 'is_active', 'is_admin')
 
     def clean_password(self):
@@ -60,7 +61,7 @@ class UserAdmin(BaseUserAdmin):
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
     list_display = ('username', 'nickname')
-    list_filter = ()
+    list_filter = ('username', 'article_count')
     fieldsets = (
         (None, {'fields': ('password',)}),
         ('Personal info', {'fields': ('nickname',)}),
@@ -72,12 +73,13 @@ class UserAdmin(BaseUserAdmin):
         (None, {
             'classes': ('wide',),
             'fields': ('nickname', 'password1', 'password2')}
-        ),
+         ),
     )
     search_fields = ('username', 'nickname',)
     ordering = ('username',)
     filter_horizontal = ()
 
 
-admin.site.register(models.User, UserAdmin)
+admin.site.register(User, UserAdmin)
+admin.site.register(Article)
 admin.site.unregister(Group)

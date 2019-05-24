@@ -1,5 +1,5 @@
 from django.urls import path
-from users import views
+from User import views
 
 urlpatterns = [
     path('log/', views.log, name='user.username.print'),

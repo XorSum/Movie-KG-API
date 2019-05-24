@@ -43,7 +43,7 @@ GET /api/v1/movie/person/<personId>/
 
 #### More
 
-[More details](users/api_tests/requests.http)
+[More details](User/api_tests/requests.http)
 
 
 ## 测试运行

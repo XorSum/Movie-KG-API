@@ -1,4 +1,5 @@
-from users.api_tests.util import *
+from User.api_tests.util import *
+import os
 
 user = []
 n = 5

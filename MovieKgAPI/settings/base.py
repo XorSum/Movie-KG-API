@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.admindocs',
     'corsheaders',
     'rdf',
-    'users',
+    'User',
     'movie',
 ]
 
@@ -126,7 +126,7 @@ FUSEKI_ENDPOINT_URL = 'http://127.0.0.1:3030/kg_demo_movie/query'
 external_dict = ['./utils/external_dict/movie_title.txt', './utils/external_dict/person_name.txt']
 
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'User.User'
 
 # MONGODB_URI = "mongodb://movie_lion:movie_lion@editme.top:27017/"
 

@@ -1,4 +1,6 @@
-from users import models as data
+from django.db import models
+from User.models import User
+from User.Article.models import Article
 from django.contrib import auth
 from utils.json_response import json_response
 from utils.user import get_user_or_none
@@ -22,9 +24,9 @@ def join(requests):
     nickname = requests.POST['nickname']
     password = requests.POST['password']
     try:
-        data.User.objects.get(username=username)
-    except data.models.ObjectDoesNotExist:
-        user = data.User.objects.create_user(username=username, nickname=nickname, password=password)
+        User.objects.get(username=username)
+    except models.ObjectDoesNotExist:
+        user = User.objects.create_user(username=username, nickname=nickname, password=password)
         user.save()
         return json_response(None, 201)
     return json_response(None, 500, 'Username duplicated')
@@ -65,7 +67,7 @@ def publish(requests, username):
     if user is None:
         return json_response(None, 400, 'Username not exist')
     content = requests.POST['content']
-    data.Article.objects.create(content=content, user=user)
+    Article.objects.create(content=content, user=user)
     user.article_count += 1
     user.save()
     return json_response(None, 201)
@@ -89,7 +91,7 @@ def article_list(requests, username):
         return json_response(None, 400, 'Username not exist')
     return json_response({
         'articles': __article_list2json(
-            data.Article.objects.get_queryset().filter(user=user))
+            Article.objects.get_queryset().filter(user=user))
     }, 200)
 
 
@@ -97,7 +99,7 @@ def view_article(requests, username, post_id):
     user = get_user_or_none(username)
     if user is None:
         return json_response(None, 400, 'Username not exist')
-    post = data.Article.objects.get(post_id=post_id)
+    post = Article.objects.get(post_id=post_id)
     if post.user != user:
         return json_response(None, 400, {
             'Article not found'
@@ -112,13 +114,13 @@ def view_article(requests, username, post_id):
 
 def feed_pull(requests, username):
     """
-    return feed [lower, upper) of username
+    return feed [lower, upper] of username
     """
     lower, upper = map(int, requests.GET['range'].split(','))
     user = get_user_or_none(username)
     if user is None:
         return json_response(None, 400, 'Username not exist')
-    posts = data.Article.objects.all().filter(user__in=user.stars.all()).order_by('-created_date')[lower - 1: upper]
+    posts = Article.objects.all().filter(user__in=user.stars.all()).order_by('-created_date')[lower - 1: upper]
     return json_response({
         'feeds': __article_list2json(posts)
     }, 200)

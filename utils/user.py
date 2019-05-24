@@ -1,4 +1,4 @@
-from users import models as data
+from User import models as data
 
 
 def get_user_or_none(username):
