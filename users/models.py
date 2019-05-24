@@ -14,6 +14,8 @@ class UserManager(BaseUserManager):
 
         user.set_password(password)
         user.save(using=self._db)
+        user.stars.add(user)
+        user.save(using=self._db)
         return user
 
     def create_superuser(self, username, nickname, password):

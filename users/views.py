@@ -1,12 +1,9 @@
-from django.shortcuts import HttpResponse, Http404
 from users import models as data
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib import auth
 from utils.json_response import json_response
 from utils.user import get_user_or_none
 
 
-@csrf_exempt
 def login(requests):
     username = requests.POST['username']
     password = requests.POST['password']
@@ -20,7 +17,6 @@ def login(requests):
     return json_response(None, 400, 'Username not exist')
 
 
-@csrf_exempt
 def join(requests):
     username = requests.POST['username']
     nickname = requests.POST['nickname']
@@ -75,21 +71,25 @@ def publish(requests, username):
     return json_response(None, 201)
 
 
-def article_list(requests, username):
-    user = get_user_or_none(username)
-    if user is None:
-        return json_response(None, 400, 'Username not exist')
-    lst = data.Article.objects.get_queryset().filter(user=user)
+def __article_list2json(__article_list):
     ret = []
-    for each in lst:
+    for each in __article_list:
         ret.append({
             'post_id': each.post_id,
             'content': each.content,
             'date': each.created_date,
             'user': each.user.username,
         })
+    return ret
+
+
+def article_list(requests, username):
+    user = get_user_or_none(username)
+    if user is None:
+        return json_response(None, 400, 'Username not exist')
     return json_response({
-        'articles': ret
+        'articles': __article_list2json(
+            data.Article.objects.get_queryset().filter(user=user))
     }, 200)
 
 
@@ -108,3 +108,18 @@ def view_article(requests, username, post_id):
         'date': post.created_date,
         'user': post.user.username,
     }, 200)
+
+
+def feed_pull(requests, username):
+    """
+    return feed [lower, upper) of username
+    """
+    lower, upper = map(int, requests.GET['range'].split(','))
+    user = get_user_or_none(username)
+    if user is None:
+        return json_response(None, 400, 'Username not exist')
+    posts = data.Article.objects.all().filter(user__in=user.stars.all()).order_by('-created_date')[lower - 1: upper]
+    return json_response({
+        'feeds': __article_list2json(posts)
+    }, 200)
+

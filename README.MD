@@ -28,6 +28,8 @@ GET /api/v1/user/<username>/star/<username>
 POST /api/v1/user/<username>/publish?content=
 GET /api/v1/user/<username>/articles
 GET /api/v1/user/<username>/article/<post_id>
+GET /api/v1/user/<username>/feeds?range=<lower>,<upper>
+# return feeds of user in [lower, upper] ordered by timeline
 ```
 
 #### Movie
@@ -41,7 +43,7 @@ GET /api/v1/movie/person/<personId>/
 
 #### More
 
-[More details](users/requests.http)
+[More details](users/api_tests/requests.http)
 
 
 ## 测试运行
