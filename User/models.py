@@ -4,8 +4,19 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 class UserManager(BaseUserManager):
     def create_user(self, username, nickname, password=None):
-        if not username:
-            raise ValueError('Users must have an username')
+
+        def valid(__username):
+            if not __username:
+                return False
+            if not __username[0].islower():
+                return False
+            for ch in __username:
+                if not (ch.islower() or ch.isdigit()):
+                    return False
+            return True
+
+        if not valid(username):
+            raise ValueError('用户名必须由小写字母和数字组成，且开头为小写字母')
 
         user = self.model(
             username=username,

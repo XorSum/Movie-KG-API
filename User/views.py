@@ -91,7 +91,7 @@ def article_list(requests, username):
         return json_response(None, 400, 'Username not exist')
     return json_response({
         'articles': __article_list2json(
-            Article.objects.get_queryset().filter(user=user))
+            Article.objects.filter(user=user).order_by('-created_date'))
     }, 200)
 
 
@@ -120,7 +120,7 @@ def feed_pull(requests, username):
     user = get_user_or_none(username)
     if user is None:
         return json_response(None, 400, 'Username not exist')
-    posts = Article.objects.all().filter(user__in=user.stars.all()).order_by('-created_date')[lower - 1: upper]
+    posts = Article.objects.filter(user__in=user.stars.all()).order_by('-created_date')[lower - 1: upper]
     return json_response({
         'feeds': __article_list2json(posts)
     }, 200)
