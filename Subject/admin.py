@@ -1,5 +1,5 @@
 from django.contrib import admin
-from movie.models import Movie, Person, MoviePerson, MovieVideo, MovieTag, MovieGenre
+from Subject.models import Movie, Person, MoviePerson, MovieVideo, MovieTag, MovieGenre
 
 # Register your models here.
 

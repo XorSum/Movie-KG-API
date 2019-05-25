@@ -21,5 +21,5 @@ urlpatterns = [
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
     path('api/v1/user/', include('User.urls')),
-    path('api/v1/movie/',include('movie.urls')),
+    path('api/v1/subject/', include('Subject.urls')),
 ]

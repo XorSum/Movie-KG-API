@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
+import logging
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rdf',
     'User',
-    'movie',
+    'Subject',
 ]
 
 MIDDLEWARE = [
@@ -139,3 +139,6 @@ MONGO_DB = "movie_lion"
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static/static")
+
+
+logging.basicConfig(level=logging.DEBUG)

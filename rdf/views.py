@@ -1,5 +1,5 @@
 from django.http import HttpResponse, JsonResponse
-from MovieKgAPI.settings import MONGO_HOST, MONGO_PORT, MONGO_DB
+from MovieKgAPI.settings.base import MONGO_HOST, MONGO_PORT, MONGO_DB
 from utils.query_main import AMI
 from urllib import parse
 import json

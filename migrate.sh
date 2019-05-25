@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ $1 == "clean" || $1 == "reset" ]]; then
-    MODEL_LIST="rdf User movie"
+    MODEL_LIST="rdf User Subject"
     for model in ${MODEL_LIST}; do
         rm -rf ${model}/migrations/*
         touch ${model}/migrations/__init__.py

@@ -32,14 +32,17 @@ GET /api/v1/user/<username>/feeds?range=<lower>,<upper>
 # return feeds of user in [lower, upper] ordered by timeline
 ```
 
-#### Movie
+#### Subject
 
 ```plain
-GET /api/v1/movie/movie/search/?title=
-GET /api/v1/movie/movie/<movieId>/
-GET /api/v1/movie/person/search/?name=
-GET /api/v1/movie/person/<personId>/
+GET /api/v1/subject/search/?name=
+GET /api/v1/subject/<subjectId>/
+GET /api/v1/subject/movie/search/?title=
+GET /api/v1/subject/movie/<movieId>/
+GET /api/v1/subject/person/search/?name=
+GET /api/v1/subject/person/<personId>/
 ```
+you can consider subject as the abstract class of movie and person.
 
 #### More
 
@@ -80,7 +83,7 @@ $ python3 manage.py runserver
 
 ### mysql建库
 ```mysql
-CREATRE DATABASE movie_kg CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE movie_kg CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 ### 多settings文件
