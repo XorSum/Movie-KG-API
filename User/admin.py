@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from User.models import User
-from User.Article.models import Article
+from User.Article.models import Article, ReadHistory
 
 
 class UserCreationForm(forms.ModelForm):
@@ -83,3 +83,4 @@ class UserAdmin(BaseUserAdmin):
 admin.site.register(User, UserAdmin)
 admin.site.register(Article)
 admin.site.unregister(Group)
+admin.site.register(ReadHistory)

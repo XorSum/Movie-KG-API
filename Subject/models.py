@@ -3,13 +3,9 @@ from utils.serializer import to_dict
 
 # Create your models here.
 
-class Subject(models.Model):
+
+class Movie(models.Model):
     id = models.AutoField(verbose_name='编号', primary_key=True, editable=False)
-    type = ''
-
-
-class Movie(Subject):
-
     year = models.IntegerField(verbose_name='年份', blank=True, null=True)
     title = models.CharField(verbose_name='名称', max_length=256, blank=True, null=True)
     rating = models.FloatField(verbose_name='评分', blank=True, null=True)
@@ -33,8 +29,8 @@ class Movie(Subject):
         return data
 
 
-class Person(Subject):
-
+class Person(models.Model):
+    id = models.AutoField(verbose_name='编号', primary_key=True, editable=False)
     name = models.CharField(verbose_name='姓名', max_length=256, blank=True, null=True)
     gender = models.CharField(verbose_name='性别', max_length=10, blank=True, null=True)
     name_en = models.CharField(verbose_name='英文姓名', max_length=256, blank=True, null=True)

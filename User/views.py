@@ -81,6 +81,8 @@ def __article_list2json(__article_list):
             'content': each.content,
             'date': each.created_date,
             'user': each.user.username,
+            'movie': each.movie.serialize(),
+            'person': each.person.serialize()
         })
     return ret
 
