@@ -1,5 +1,5 @@
+from utils import utils
 from django.db import models
-
 from Subject.models import Movie, Person
 from User.models import User
 
@@ -9,8 +9,18 @@ class Article(models.Model):
     content = models.CharField(verbose_name='内容', max_length=240)
     created_date = models.DateTimeField(verbose_name='创建日期', auto_now_add=True)
     user = models.ForeignKey(User, verbose_name='发表用户', on_delete=models.PROTECT)
-    movie = models.ForeignKey(to=Movie, on_delete=models.PROTECT,null=True,blank=True)
-    person = models.ForeignKey(to=Person, on_delete=models.PROTECT,null=True,blank=True)
+    movie = models.ForeignKey(to=Movie, on_delete=models.PROTECT, null=True, blank=True)
+    person = models.ForeignKey(to=Person, on_delete=models.PROTECT, null=True, blank=True)
+
+    def json(self):
+        return {
+            'post_id': self.post_id,
+            'content': self.content,
+            'date': self.created_date,
+            'user': self.user.username,
+            'movie': utils.get_json_or_none(self.movie),
+            'person': utils.get_json_or_none(self.person)
+        }
 
     class Meta:
         verbose_name = '动态'
@@ -21,8 +31,7 @@ class ReadHistory(models.Model):
     """
     某个用户查看某个电影或者人物，则需要加一条记录
     """
-
     user = models.ForeignKey(to=User, on_delete=models.PROTECT)
-    movie = models.ForeignKey(to=Movie, on_delete=models.PROTECT,null=True,blank=True)
-    person = models.ForeignKey(to=Person, on_delete=models.PROTECT,null=True,blank=True)
+    movie = models.ForeignKey(to=Movie, on_delete=models.PROTECT, null=True, blank=True)
+    person = models.ForeignKey(to=Person, on_delete=models.PROTECT, null=True, blank=True)
     read_time = models.DateTimeField(verbose_name='创建日期', auto_now_add=True)

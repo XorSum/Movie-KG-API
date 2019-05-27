@@ -4,8 +4,19 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 class UserManager(BaseUserManager):
     def create_user(self, username, nickname, password=None):
-
+        """
+        Create user in db
+        :param username:
+        :param nickname:
+        :param password:
+        :return:
+        """
         def valid(__username):
+            """
+            Check username is valid
+            :param __username:
+            :return: True / False
+            """
             if not __username:
                 return False
             if not __username[0].islower():
@@ -25,11 +36,18 @@ class UserManager(BaseUserManager):
 
         user.set_password(password)
         user.save(using=self._db)
-        user.stars.add(user)
+        user.following.add(user)
         user.save(using=self._db)
         return user
 
     def create_superuser(self, username, nickname, password):
+        """
+        Create a normal user first, then set it administrator
+        :param username:
+        :param nickname:
+        :param password:
+        :return:
+        """
         user = self.create_user(
             username=username,
             nickname=nickname,
@@ -46,7 +64,7 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(verbose_name='用户可用', default=True)
     is_admin = models.BooleanField(verbose_name='管理员用户', default=False)
     article_count = models.IntegerField(default=0, verbose_name='推文数量', editable=False)
-    stars = models.ManyToManyField("self")
+    following = models.ManyToManyField("self")
 
     objects = UserManager()
 
@@ -57,20 +75,47 @@ class User(AbstractBaseUser):
         return self.username
 
     def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
+        """Does the user have a specific permission?"""
         # Simplest possible answer: Yes, always
         return True
 
     def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
+        """Does the user have permissions to view the app `app_label`?"""
         # Simplest possible answer: Yes, always
         return True
 
     @property
     def is_staff(self):
-        "Is the user a member of staff?"
+        """Is the user a member of staff?"""
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
+    def json(self):
+        """
+        :return: self's data in JSON
+        """
+        return {
+            'username': self.username,
+            'nickname': self.nickname,
+            'article_count': self.article_count
+        }
+
+    def follow_list(self):
+        """
+        :return: self's follow list in JSON
+        """
+        ret = []
+        for each in self.following.all():
+            ret.append(each.json())
+        return ret
+
+    def follow(self, followee):
+        """
+        self follow followee
+        :param followee:
+        :return:
+        """
+        self.following.add(followee)
 
     class Meta:
         verbose_name = '用户'
