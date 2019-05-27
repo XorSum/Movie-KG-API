@@ -15,7 +15,7 @@ class Movie(models.Model):
     def __str__(self):
         return "Movie: " + self.title + "-" + str(self.id)
 
-    def serialize(self, show_person=False, show_video=False):
+    def json(self, show_person=False, show_video=False):
         """
         序列化
         """
@@ -23,9 +23,9 @@ class Movie(models.Model):
         data['url'] = '/subject/movie/' + str(self.id) + '/'
         data['type'] = 'movie'
         if show_person:
-            data['persons'] = [mp.serialize(show_person=True) for mp in MoviePerson.objects.filter(movie=self).all()]
+            data['persons'] = [mp.json(show_person=True) for mp in MoviePerson.objects.filter(movie=self).all()]
         if show_video:
-            data['videos'] = [video.serialize() for video in MovieVideo.objects.filter(movie=self).all()]
+            data['videos'] = [video.json() for video in MovieVideo.objects.filter(movie=self).all()]
         return data
 
 
@@ -41,12 +41,12 @@ class Person(models.Model):
     def __str__(self):
         return "Person: " + self.name + "-" + str(self.id)
 
-    def serialize(self, show_movie=False):
+    def json(self, show_movie=False):
         data = to_dict(self, ['id', 'name', 'gender', 'name_en', 'summary', 'birthday', 'bornplace'])
         data['url'] = '/subject/person/' + str(self.id) + '/'
         data['type'] = 'person'
         if show_movie:
-            data['movies'] = [mp.serialize(show_movie=True) for mp in MoviePerson.objects.filter(person=self).all()]
+            data['movies'] = [mp.json(show_movie=True) for mp in MoviePerson.objects.filter(person=self).all()]
         return data
 
 
@@ -61,9 +61,9 @@ class MoviePerson(models.Model):
     def serialize(self, show_movie=False, show_person=False):
         data = {'role': self.role}
         if show_person:
-            data['person'] = self.person.serialize()
+            data['person'] = self.person.json()
         if show_movie:
-            data['movie'] = self.movie.serialize()
+            data['movie'] = self.movie.json()
         return data
 
 

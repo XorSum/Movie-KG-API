@@ -22,7 +22,7 @@ def init():
 
 if __name__ == '__main__':
     init()
-    # ret = feeds(user[0], 1, 10)
-    ret = articles(user[0])
+    ret = feeds(user[0], 1, 10)
+    # ret = articles(user[0])
     for each in ret:
         print(each)

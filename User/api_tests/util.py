@@ -21,7 +21,7 @@ def register(username, nickname, password='password'):
 
 
 def star(follower, followee):
-    get('/user/%s/star/%s' % (follower, followee))
+    get('/user/%s/follow/%s' % (follower, followee))
 
 
 def publish(username, content):
