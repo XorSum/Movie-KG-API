@@ -1,5 +1,7 @@
 from django.db import models
+from User.Article.models import Article
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from User.util.article import get_article_or_none, article_list2array
 
 
 class UserManager(BaseUserManager):
@@ -113,9 +115,37 @@ class User(AbstractBaseUser):
         """
         self follow followee
         :param followee:
-        :return:
+        :return: None
         """
         self.following.add(followee)
+
+    def publish(self, content):
+        """
+        Publish an article
+        :param content:
+        :return: None
+        """
+        Article.objects.create(content=content, user=self)
+        self.article_count += 1
+        self.save()
+
+    def view_article(self, post_id):
+        """
+        View article of user
+        :param post_id:
+        :return: Article.json() or None
+        """
+        __post = get_article_or_none(post_id)
+        if __post is None or __post.user != self:
+            return None
+        return __post.json()
+
+    def article_list(self):
+        """
+        Self's article list sorted by time, minimal index for newest article
+        :return: Array
+        """
+        return article_list2array(Article.objects.filter(user=self).order_by('-created_date'))
 
     class Meta:
         verbose_name = '用户'

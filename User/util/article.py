@@ -15,7 +15,7 @@ def get_article_or_none(article):
     return article
 
 
-def article_list2json(article_list):
+def article_list2array(article_list):
     ret = []
     for article in article_list:
         ret.append(article.json())
