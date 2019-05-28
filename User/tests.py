@@ -1,5 +1,6 @@
 from django.test import TestCase
 from User.util import user, user_article, article
+from User.models import User
 import json
 
 
@@ -16,6 +17,10 @@ class UserTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        """
+        Create 5 user named user_i (i from 0 to 4), then user0 star all user
+        :return:
+        """
         for i in range(cls.n):
             user.join(username=s('user', i), nickname=s('nick', i), password='test')
         for i in range(1, cls.n):
@@ -26,12 +31,49 @@ class UserTestCase(TestCase):
     def test_feed_pull(self):
         def check(array):
             buf = 20
+            flag = True
             for each in array:
+                print('post id: ', each['post_id'], '; buf: ', buf)
                 if each['post_id'] != buf:
-                    return False
-                return True
+                    flag = False
+                buf -= 1
+            return flag
 
-        feeds = user_article.feed_pull(s('user', 0), 1, 5)
+        feeds = user_article.feeds_pull(s('user', 0), 1, 100)
         feeds = json_response2json(feeds)
         self.assertEqual(feeds['status'], 200)
         self.assertTrue(check(array=feeds['data']['feeds']))
+
+    def test_feed_push(self):
+        def check(array):
+            buf = 20
+            flag = True
+            for each in array:
+                print('post id: ', each['post_id'], '; buf: ', buf)
+                if each['post_id'] != buf:
+                    flag = False
+                buf -= 1
+            return flag
+
+        feeds = user_article.get_feeds(s('user', 0), 1, 100)
+        feeds = json_response2json(feeds)
+        self.assertEqual(feeds['status'], 200)
+        self.assertTrue(check(array=feeds['data']['feeds']))
+
+    def test_diff_push_pull(self):
+        pull = user_article.feeds_pull(s('user', 0), 1, 100)
+        push = user_article.get_feeds(s('user', 0), 1, 100)
+        self.assertEqual(pull.content, push.content)
+
+    def test_many2many_reverse_query(self):
+        index = 2
+
+        def check(array):
+            for each in array:
+                if each == User.objects.get(username=s('user', index)):
+                    continue
+                if each != User.objects.get(username=s('user', 0)):
+                    return False
+            return True
+        __user = User.objects.get(username=s('user', index))
+        self.assertTrue(check(array=__user.user_set.all()))
