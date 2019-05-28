@@ -1,4 +1,4 @@
-from .base import *
+from MovieKgAPI.settings.base import *
 
 DEBUG = True
 DATABASES = {
