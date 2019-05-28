@@ -1,5 +1,6 @@
 from django.test import TestCase
 from User.util import user, user_article, article
+from User.models import User
 import json
 
 
@@ -16,6 +17,10 @@ class UserTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        """
+        Create 5 user named user_i (i from 0 to 4), then user0 star all user
+        :return:
+        """
         for i in range(cls.n):
             user.join(username=s('user', i), nickname=s('nick', i), password='test')
         for i in range(1, cls.n):
@@ -35,3 +40,16 @@ class UserTestCase(TestCase):
         feeds = json_response2json(feeds)
         self.assertEqual(feeds['status'], 200)
         self.assertTrue(check(array=feeds['data']['feeds']))
+
+    def test_many2many_reverse_query(self):
+        index = 2
+
+        def check(array):
+            for each in array:
+                if each == User.objects.get(username=s('user', index)):
+                    continue
+                if each != User.objects.get(username=s('user', 0)):
+                    return False
+            return True
+        __user = User.objects.get(username=s('user', index))
+        self.assertTrue(check(array=__user.user_set.all()))

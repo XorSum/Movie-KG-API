@@ -35,3 +35,10 @@ def feed_pull(user, lower, upper):
     return json_response({'feeds': article_list2array(buf)}, 200)
 
 
+@username2user
+def feed_push(user):
+    pass
+
+
+def get_feed(user):
+    pass
