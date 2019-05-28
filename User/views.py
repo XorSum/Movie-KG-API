@@ -1,5 +1,5 @@
 from utils.json_response import json_response
-from User.util import user as user_util, user_article, article as article_util
+from User.util import user as user_util, user_article
 
 
 def login(requests):

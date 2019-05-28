@@ -64,8 +64,7 @@ ROOT_URLCONF = 'MovieKgAPI.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,7 +125,7 @@ FUSEKI_ENDPOINT_URL = 'http://127.0.0.1:3030/kg_demo_movie/query'
 external_dict = ['./utils/external_dict/movie_title.txt', './utils/external_dict/person_name.txt']
 
 
-AUTH_USER_MODEL = 'User.User'
+AUTH_USER_MODEL = "User.User"
 
 # MONGODB_URI = "mongodb://movie_lion:movie_lion@editme.top:27017/"
 
@@ -142,6 +141,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/static")
 
 
 logging.basicConfig(level=logging.DEBUG)
-
-
-AUTH_USER_MODEL = "User.User"

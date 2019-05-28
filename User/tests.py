@@ -1,5 +1,5 @@
 from django.test import TestCase
-from User.util import user, user_article, article
+from User.util import user, user_article
 from User.models import User, Article
 import json
 

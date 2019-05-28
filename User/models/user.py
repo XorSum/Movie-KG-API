@@ -1,7 +1,5 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
-
-from MovieKgAPI.settings.base import AUTH_USER_MODEL
 from User.models.favorites import Favorites
 from User.models.readhistory import ReadHistory
 from User.models.usermanager import UserManager
@@ -14,8 +12,8 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(verbose_name='用户可用', default=True)
     is_admin = models.BooleanField(verbose_name='管理员用户', default=False)
     article_count = models.IntegerField(default=0, verbose_name='推文数量', editable=False)
-    following = models.ManyToManyField(AUTH_USER_MODEL)
-    feeds = models.ManyToManyField(Article, related_name="feeds")
+    following = models.ManyToManyField('User.User')
+    feeds = models.ManyToManyField('User.Article', related_name="feeds")
 
     objects = UserManager()
 
@@ -89,19 +87,6 @@ class User(AbstractBaseUser):
         :return: Query set
         """
         return self.feeds.all().order_by('-created_date')[lower - 1: upper]
-
-    def view_article(self, post_id):
-        """
-        View article of user
-        :param post_id:
-        :return: Article.json() or None
-        """
-        # __post = get_article_or_none(post_id)
-        # if __post is None or __post.user != self:
-        #     return None
-        # return __post.json()
-        return None
-
 
     def article_list(self):
         """
