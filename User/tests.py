@@ -31,15 +31,39 @@ class UserTestCase(TestCase):
     def test_feed_pull(self):
         def check(array):
             buf = 20
+            flag = True
             for each in array:
+                print('post id: ', each['post_id'], '; buf: ', buf)
                 if each['post_id'] != buf:
-                    return False
-                return True
+                    flag = False
+                buf -= 1
+            return flag
 
-        feeds = user_article.feed_pull(s('user', 0), 1, 5)
+        feeds = user_article.feeds_pull(s('user', 0), 1, 100)
         feeds = json_response2json(feeds)
         self.assertEqual(feeds['status'], 200)
         self.assertTrue(check(array=feeds['data']['feeds']))
+
+    def test_feed_push(self):
+        def check(array):
+            buf = 20
+            flag = True
+            for each in array:
+                print('post id: ', each['post_id'], '; buf: ', buf)
+                if each['post_id'] != buf:
+                    flag = False
+                buf -= 1
+            return flag
+
+        feeds = user_article.get_feeds(s('user', 0), 1, 100)
+        feeds = json_response2json(feeds)
+        self.assertEqual(feeds['status'], 200)
+        self.assertTrue(check(array=feeds['data']['feeds']))
+
+    def test_diff_push_pull(self):
+        pull = user_article.feeds_pull(s('user', 0), 1, 100)
+        push = user_article.get_feeds(s('user', 0), 1, 100)
+        self.assertEqual(pull.content, push.content)
 
     def test_many2many_reverse_query(self):
         index = 2

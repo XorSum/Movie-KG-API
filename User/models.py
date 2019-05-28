@@ -67,6 +67,7 @@ class User(AbstractBaseUser):
     is_admin = models.BooleanField(verbose_name='管理员用户', default=False)
     article_count = models.IntegerField(default=0, verbose_name='推文数量', editable=False)
     following = models.ManyToManyField("User")
+    feeds = models.ManyToManyField("Article", related_name="feeds")
 
     objects = UserManager()
 
@@ -125,9 +126,21 @@ class User(AbstractBaseUser):
         :param content:
         :return: None
         """
-        Article.objects.create(content=content, user=self)
+        article = Article.objects.create(content=content, user=self)
         self.article_count += 1
         self.save()
+        followers = self.user_set.all()
+        for each in followers:
+            each.feeds.add(article)
+
+    def get_feeds(self, lower, upper):
+        """
+        get self's feed of [lower, upper]
+        :param lower:
+        :param upper:
+        :return: Query set
+        """
+        return self.feeds.all().order_by('-created_date')[lower - 1: upper]
 
     def view_article(self, post_id):
         """
