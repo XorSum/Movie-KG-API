@@ -1,7 +1,6 @@
 from utils.json_response import json_response
 from User.util.user import username2user
-from User.util.article import article_list2array
-from User.Article.models import Article
+from User.models.article import Article
 
 
 @username2user
@@ -32,7 +31,7 @@ def feeds_pull(user, lower, upper):
     """
     buf = Article.objects.filter(
         user__in=user.following.all()).order_by('-created_date')[lower - 1: upper]
-    return json_response({'feeds': article_list2array(buf)}, 200)
+    return json_response({'feeds': [each.json() for each in buf]}, 200)
 
 
 @username2user
@@ -45,4 +44,4 @@ def get_feeds(user, lower, upper):
     :return: JSON response
     """
     buf = user.get_feeds(lower, upper)
-    return json_response({'feeds': article_list2array(buf)}, 200)
+    return json_response({'feeds': [each.json() for each in buf]}, 200)

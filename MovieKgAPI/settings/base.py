@@ -142,3 +142,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/static")
 
 
 logging.basicConfig(level=logging.DEBUG)
+
+
+AUTH_USER_MODEL = "User.User"

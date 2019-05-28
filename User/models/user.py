@@ -1,63 +1,9 @@
+from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
-from User.Article.models import Article
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
-from User.util.article import get_article_or_none, article_list2array
 
-
-class UserManager(BaseUserManager):
-    def create_user(self, username, nickname, password=None):
-        """
-        Create user in db
-        :param username:
-        :param nickname:
-        :param password:
-        :return:
-        """
-        def valid(__username):
-            """
-            Check username is valid
-            :param __username:
-            :return: True / False
-            """
-            if not __username:
-                return False
-            if not __username[0].islower():
-                return False
-            for ch in __username:
-                if not (ch.islower() or ch.isdigit()):
-                    return False
-            return True
-
-        if not valid(username):
-            raise ValueError('用户名必须由小写字母和数字组成，且开头为小写字母')
-
-        user = self.model(
-            username=username,
-            nickname=nickname,
-        )
-
-        user.set_password(password)
-        user.save(using=self._db)
-        user.following.add(user)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, username, nickname, password):
-        """
-        Create a normal user first, then set it administrator
-        :param username:
-        :param nickname:
-        :param password:
-        :return:
-        """
-        user = self.create_user(
-            username=username,
-            nickname=nickname,
-            password=password,
-        )
-        user.is_admin = True
-        user.save(using=self._db)
-        return user
+from MovieKgAPI.settings.base import AUTH_USER_MODEL
+from User.models.usermanager import UserManager
+from User.models.article import Article
 
 
 class User(AbstractBaseUser):
@@ -66,8 +12,8 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(verbose_name='用户可用', default=True)
     is_admin = models.BooleanField(verbose_name='管理员用户', default=False)
     article_count = models.IntegerField(default=0, verbose_name='推文数量', editable=False)
-    following = models.ManyToManyField("User")
-    feeds = models.ManyToManyField("Article", related_name="feeds")
+    following = models.ManyToManyField(AUTH_USER_MODEL)
+    feeds = models.ManyToManyField(Article, related_name="feeds")
 
     objects = UserManager()
 
@@ -148,17 +94,21 @@ class User(AbstractBaseUser):
         :param post_id:
         :return: Article.json() or None
         """
-        __post = get_article_or_none(post_id)
-        if __post is None or __post.user != self:
-            return None
-        return __post.json()
+        # __post = get_article_or_none(post_id)
+        # if __post is None or __post.user != self:
+        #     return None
+        # return __post.json()
+        return None
+
 
     def article_list(self):
         """
         Self's article list sorted by time, minimal index for newest article
         :return: Array
         """
-        return article_list2array(Article.objects.filter(user=self).order_by('-created_date'))
+        buf = Article.objects.filter(user=self).order_by('-created_date')
+        return [each.json() for each in buf]
+
 
     class Meta:
         verbose_name = '用户'
