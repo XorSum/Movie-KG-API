@@ -1,6 +1,6 @@
 from django.test import TestCase
 from User.util import user, user_article, article
-from User.models import User
+from User.models import User, Article
 import json
 
 
@@ -77,3 +77,16 @@ class UserTestCase(TestCase):
             return True
         __user = User.objects.get(username=s('user', index))
         self.assertTrue(check(array=__user.user_set.all()))
+
+    def test_favorites(self):
+        for i in range(5):
+            username = 'user'+str(i)
+            user = User.objects.get(username=username)
+            article = Article.objects.create(content='article',user=user)
+            user.create_favorites('favo'+str(i))
+            for i in user.favorites_set.all():
+                i.add_article(article)
+                print(i.json())
+                i.remove_article(article)
+                print(i.json())
+            print(user.json())

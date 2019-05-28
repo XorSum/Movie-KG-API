@@ -2,6 +2,8 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 
 from MovieKgAPI.settings.base import AUTH_USER_MODEL
+from User.models.favorites import Favorites
+from User.models.readhistory import ReadHistory
 from User.models.usermanager import UserManager
 from User.models.article import Article
 
@@ -109,6 +111,30 @@ class User(AbstractBaseUser):
         buf = Article.objects.filter(user=self).order_by('-created_date')
         return [each.json() for each in buf]
 
+    def read(self,article):
+        """
+        增加一条阅读记录
+        :param article:
+        :return: None
+        """
+        ReadHistory.objects.create(user=self,article=article)
+        return None
+
+    def read_history(self):
+        """
+        获取阅读历史
+        :return: list of ReadHistories
+        """
+        buf = ReadHistory.objects.filter(user=self)
+        return [each.json() for each in buf]
+
+    def create_favorites(self,favorites_name):
+        """
+        创建收藏夹
+        :param favorites_name:
+        :return:
+        """
+        Favorites.objects.create(user=self,name=favorites_name)
 
     class Meta:
         verbose_name = '用户'
