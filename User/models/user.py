@@ -113,13 +113,22 @@ class User(AbstractBaseUser):
         buf = ReadHistory.objects.filter(user=self)
         return [each.json() for each in buf]
 
-    def create_favorites(self,favorites_name):
+    def create_favorites(self, favorites_name, private):
         """
         创建收藏夹
         :param favorites_name:
-        :return:
+        :return: Favorite对象
         """
-        Favorites.objects.create(user=self,name=favorites_name)
+        Favorites.objects.create(user=self, name=favorites_name, private=private)
+        return self.favorites_set.filter(name=favorites_name).first()
+
+    def get_favorites_list(self):
+        """
+        获取收藏夹列表
+        :return: list of json
+        """
+        return [each.json() for each in self.favorites_set.all()]
+
 
     class Meta:
         verbose_name = '用户'
