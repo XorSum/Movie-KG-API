@@ -1,6 +1,7 @@
 from django.db import models
 from utils.serializer import to_dict
 
+
 # Create your models here.
 
 

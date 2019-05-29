@@ -11,6 +11,7 @@ def username2user(func):
         except ObjectDoesNotExist:
             return json_response(None, 400, 'Username not exist')
         return func(user, *args, **kwargs)
+
     return wrapper
 
 
@@ -58,7 +59,7 @@ def login(username, password):
             'info': user.json()
         }, 200)
     return json_response(None, 400, 'Username not exist')
-    
+
 
 def follow(follower, followee):
     follower = get_user_or_none(follower)

@@ -47,4 +47,3 @@ def feed_pull(requests, username):
     """
     lower, upper = map(int, requests.GET['range'].split(','))
     return user_article.get_feeds(username, lower, upper)
-

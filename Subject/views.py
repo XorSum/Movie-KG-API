@@ -10,6 +10,7 @@ from utils.json_response import json_response
 def hello(request):
     return HttpResponse('congratulations!')
 
+
 def get_subject(request, subjectId):
     try:
         subject = Person.objects.get(id=subjectId)
@@ -25,8 +26,8 @@ def get_subject(request, subjectId):
 def search_subject(request):
     try:
         name = request.GET['name']
-    except :
-        return json_response('need param \'name\'',500)
+    except:
+        return json_response('need param \'name\'', 500)
     result = []
     for movie in Movie.objects.filter(title=name).all():
         result.append(movie.json(show_person=True))
@@ -58,7 +59,7 @@ def search_movie(request):
     result = []
     try:
         title = parse.unquote(request.GET['title'])
-        logging.info('search movie, title='+str(title))
+        logging.info('search movie, title=' + str(title))
         for movie in Movie.objects.filter(title=title).all():
             result.append(movie.json(show_person=True))
         return json_response(result, 200)

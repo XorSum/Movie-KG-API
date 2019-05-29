@@ -77,6 +77,7 @@ class UserTestCase(TestCase):
                 if each != User.objects.get(username=s('user', 0)):
                     return False
             return True
+
         __user = User.objects.get(username=s('user', index))
         self.assertTrue(check(array=__user.user_set.all()))
 
@@ -105,10 +106,9 @@ class FavotitesTestCase(TestCase):
         favorites = han.create_favorites(favorites_name='pub_fav', private=False)
         article = Article.objects.filter().last()
         favorites.add_article(article)
-        print(favorites.json(show_articles=True,show_user=True))
+        print(favorites.json(show_articles=True, show_user=True))
         favorites.remove_article(article)
-        print(favorites.json(show_articles=True,show_user=True))
-
+        print(favorites.json(show_articles=True, show_user=True))
 
     def test_article_in_which_favorites(self):
         article = Article.objects.filter().first()
@@ -117,7 +117,7 @@ class FavotitesTestCase(TestCase):
         pub_favorites = han.create_favorites(favorites_name='pub_fav', private=False)
         pub_favorites.add_article(article)
 
-        pri_favorites =  han.create_favorites(favorites_name='pri_fav',private=True)
+        pri_favorites = han.create_favorites(favorites_name='pri_fav', private=True)
         pri_favorites.add_article(article)
 
         print(article.in_which_favorites(han))

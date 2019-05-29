@@ -9,5 +9,3 @@ admin.site.register(MoviePerson)
 admin.site.register(MovieVideo)
 admin.site.register(MovieTag)
 admin.site.register(MovieGenre)
-
-

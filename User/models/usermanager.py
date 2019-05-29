@@ -10,6 +10,7 @@ class UserManager(BaseUserManager):
         :param password:
         :return:
         """
+
         def valid(__username):
             """
             Check username is valid
