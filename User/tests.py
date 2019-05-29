@@ -1,6 +1,5 @@
 from django.test import TestCase
 
-from User.models.favorites import Favorites
 from User.util import user, user_article
 from User.models import User, Article
 import json
@@ -82,7 +81,7 @@ class UserTestCase(TestCase):
         self.assertTrue(check(array=__user.user_set.all()))
 
 
-class FavotitesTestCase(TestCase):
+class FavoritesTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):

@@ -48,9 +48,9 @@ def join(username, nickname, password):
 def login(username, password):
     """
     Login check
-    :param username:
-    :param password:
-    :return: User object for success or None
+    str:param username:
+    str:param password:
+    User Model:return: User object for success or None
     """
     user = auth.authenticate(username=username, password=password)
     if user:

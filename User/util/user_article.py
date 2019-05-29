@@ -1,12 +1,16 @@
 from utils.json_response import json_response
 from User.util.user import username2user
 from User.models.article import Article
+from django.db.models import ObjectDoesNotExist
 
 
 @username2user
 def view_article(user, post_id):
-    ret = user.view(post_id)
-    return json_response(ret, 200) if ret else json_response(None, 400, 'Article not found')
+    try:
+        article = Article.objects.get(post_id=post_id)
+    except ObjectDoesNotExist:
+        return json_response(None, 400, 'Article not found')
+    return json_response(article.json(), 200) if article.user == user else json_response(None, 400, 'Article not found')
 
 
 @username2user

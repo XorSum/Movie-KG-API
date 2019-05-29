@@ -13,6 +13,10 @@ __INFO = {
         'message': 'invalid',
         'detail': 'Invalid params',
     },
+    401: {
+        'message': 'forbidden',
+        'detail': 'Login required',
+    },
     500: {
         'message': 'error',
         'detail': 'Internal error',
@@ -25,7 +29,7 @@ class NotImplement(Exception):
     pass
 
 
-def json_response(data, status, detail=''):
+def json_response(data, status, token='', detail=''):
     if status not in __INFO:
         raise NotImplement
     return JsonResponse({
@@ -35,4 +39,5 @@ def json_response(data, status, detail=''):
             'message': __INFO[status]['message'],
             'detail': __INFO[status]['detail'] if detail == '' else detail,
         },
+        'token': token
     })
