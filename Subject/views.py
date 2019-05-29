@@ -7,8 +7,8 @@ from Subject.models import Movie, Person
 from utils.json_response import json_response
 
 
-def hello(request):
-    return HttpResponse('congratulations!')
+def hello(*args,**kwargs):
+    return HttpResponse('congratulations! it works!')
 
 
 def get_subject(request, subjectId):
