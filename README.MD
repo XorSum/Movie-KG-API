@@ -15,21 +15,25 @@ get接口中的参数值如果是汉字，则需要将其encodeURIComponent()
 #### User
 
 ```plain
-POST /api/v1/user/join?username=&nickname=&password=
-POST /api/v1/user/login?username=&password=
-GET /api/v1/user/<username>/log
-GET /api/v1/user/<username>/star/list
-GET /api/v1/user/<username>/star/<username>
-```
+# 主动的操作
+GET /api/v1//v1/login/    # POST  params: username, password
+GET /api/v1//v1/join/    # POST    params: username, nickname, password
+GET /api/v1//v1/article/    # 发表文章 POST   params: contend , movieId, personId, token
+GET /api/v1//v1/article/<int:article_id>/favorites/    # 查看某文章被我收藏在哪些收藏夹里 GET, params: article_id, token
+GET /api/v1//v1/favorites/<int:favorites_id>/    # 收藏文章 POST params: article_id, favorites_id, token
+GET /api/v1//v1/favorites/<int:favorites_id>/    # 取消收藏文章 DELETE params: article_id, favorites_id, token
+GET /api/v1//v1/favorites/    # 创建收藏夹  POST   params: name, token
+GET /api/v1//v1/feeds/    # 获取feeds GET   params: start, end, token
+GET /api/v1//v1/read/    # 增加阅读记录 POST ,params: article_id, token
+GET /api/v1//v1/history/    # 获取我的阅读记录 GET ,params:  token
+GET /api/v1//v1/follow/<str:followee>/
 
-#### Article
-
-```plain
-POST /api/v1/user/<username>/publish?content=
-GET /api/v1/user/<username>/articles
-GET /api/v1/user/<username>/article/<post_id>
-GET /api/v1/user/<username>/feeds?range=<lower>,<upper>
-# return feeds of user in [lower, upper] ordered by timeline
+# 旁观者的视角
+GET /api/v1//v1/user/<username>/articles/    # 获取某人的文章 GET params: username
+GET /api/v1//v1/user/<username>/public_favorites/    # 获取某人的公开收藏夹列表 GET params: username
+GET /api/v1//v1/user/<str:username>/favorites/<int:favorite_id>/   # 获取某人的某个收藏夹中的文章 GET params: usename, favorite_id,
+GET /api/v1//v1/user/<str:username>/followers/    # 获取某人的追随者, GET , params: username
+GET /api/v1//v1/user/<str:username>/idols/    # 获取某人追随的人, GET , params: username
 ```
 
 #### Subject
