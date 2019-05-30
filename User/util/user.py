@@ -4,15 +4,6 @@ from django.db.models import ObjectDoesNotExist
 from django.contrib import auth
 
 
-def username2user(func):
-    def wrapper(user, *args, **kwargs):
-        try:
-            user = User.objects.get(username=user)
-        except ObjectDoesNotExist:
-            return json_response(None, 400, 'Username not exist')
-        return func(user, *args, **kwargs)
-
-    return wrapper
 
 
 def get_user_or_none(user):
@@ -63,7 +54,6 @@ def login(username, password):
 
 
 def follow(follower, followee):
-    follower = get_user_or_none(follower)
     followee = get_user_or_none(followee)
     if follower and followee:
         follower.follow(followee)
@@ -71,6 +61,3 @@ def follow(follower, followee):
     return json_response(None, 400, 'Username not exist')
 
 
-@username2user
-def follow_list(user):
-    return json_response({'list': user.follow_list()}, 200)
