@@ -1,6 +1,5 @@
 from utils.json_response import json_response
-from utils.JWT import login_required
-from utils.utils import post
+from utils.JWT import login_required, post
 from User.util import user as user_util, user_article
 
 
@@ -11,6 +10,7 @@ def login(requests):
     return user_util.login(username=username, password=password)
 
 
+@post
 def join(requests):
     username = requests.POST['username']
     nickname = requests.POST['nickname']
@@ -24,8 +24,8 @@ def user_detail(requests, username):
 
 
 @login_required
-def follow(requests, __username):
-    return user_util.follow(follower=requests.GET['token'], followee=__username)
+def follow(requests, followee):
+    return user_util.follow(follower=requests.GET['token'], followee=followee)
 
 
 @login_required

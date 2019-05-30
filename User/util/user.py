@@ -41,7 +41,9 @@ def join(username, nickname, password):
     except ObjectDoesNotExist:
         user = User.objects.create_user(username=username, nickname=nickname, password=password)
         user.save()
-        return json_response(None, 201)
+        return json_response({
+            'info': user.json()
+        }, 201, user.token())
     return json_response(None, 500, 'Username duplicated')
 
 

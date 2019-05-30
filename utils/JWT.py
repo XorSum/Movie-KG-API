@@ -1,7 +1,15 @@
 import jwt
+import json
 import time
 from utils.json_response import json_response
 from MovieKgAPI.settings.base import JWT_CONFIG
+
+
+def post(func):
+    def wrapper(requests, *args, **kwargs):
+        requests.POST = json.loads(requests.body.decode('utf-8'))
+        return func(requests, *args, **kwargs)
+    return wrapper
 
 
 def encode(user):
@@ -32,7 +40,8 @@ def decode(token):
 def login_required(func):
     def wrapper(requests, *args, **kwargs):
         if 'token' in requests.GET:
-            payload = jwt.decode(requests.GET['token'])
+            requests.GET = requests.GET.copy()
+            payload = decode(requests.GET['token'])
             if payload:
                 now = time.time()
                 if float(payload['valid_date']) <= now:

@@ -35,7 +35,7 @@ def json_response(data, status, token='', detail=''):
     return JsonResponse({
         'data': data,
         'status': status,
-        'statusInfo': {
+        'statusMessage': {
             'message': __INFO[status]['message'],
             'detail': __INFO[status]['detail'] if detail == '' else detail,
         },
