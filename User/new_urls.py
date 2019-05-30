@@ -9,12 +9,12 @@ urlpatterns = [
     # 主动的操作
     path('login/', views.login, name='api.login'),  # POST  params: username, password
     path('join/', views.join, name='api.join'),  # POST    params: username, nickname, password
-    path('article/', hello),  # 发表文章 POST   params: contend , movieId, personId, token
+    path('article/', views.publish),  # 发表文章 POST   params: content , token
     path('article/<int:article_id>/favorites/', hello),  # 查看某文章被我收藏在哪些收藏夹里 GET, params: article_id, token
     path('favorites/<int:favorites_id>/', hello),  # 收藏文章 POST params: article_id, favorites_id, token
     path('favorites/<int:favorites_id>/', hello),  # 取消收藏文章 DELETE params: article_id, favorites_id, token
     path('favorites/', hello),  # 创建收藏夹  POST   params: name, token
-    path('feeds/', hello),  # 获取feeds GET   params: start, end, token
+    path('feeds/', views.feed_pull),  # 获取feeds GET   params: start, end, token
     path('read/', hello),  # 增加阅读记录 POST ,params: article_id, token
     path('history/', hello),  # 获取我的阅读记录 GET ,params:  token
     path('follow/<str:followee>/', views.follow, name='api.follow'),

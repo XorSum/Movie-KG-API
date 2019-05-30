@@ -94,14 +94,16 @@ class User(AbstractBaseUser):
         for each in followers:
             each.feeds.add(article)
 
-    def get_feeds(self, lower, upper):
+    def get_feeds(self,lower,upper):
         """
         get self's feed of [lower, upper]
         :param lower:
         :param upper:
         :return: Query set
         """
-        return self.feeds.all().order_by('-created_date')[lower - 1: upper]
+        lower = max(lower,0)
+        upper = max(upper,lower+20)
+        return self.feeds.all().order_by('-created_date')
 
     def article_list(self):
         """

@@ -19,13 +19,7 @@ get接口中的参数值如果是汉字，则需要将其encodeURIComponent()
 GET /api/v1//v1/login/    # POST  params: username, password
 GET /api/v1//v1/join/    # POST    params: username, nickname, password
 GET /api/v1//v1/article/    # 发表文章 POST   params: contend , movieId, personId, token
-GET /api/v1//v1/article/<int:article_id>/favorites/    # 查看某文章被我收藏在哪些收藏夹里 GET, params: article_id, token
-GET /api/v1//v1/favorites/<int:favorites_id>/    # 收藏文章 POST params: article_id, favorites_id, token
-GET /api/v1//v1/favorites/<int:favorites_id>/    # 取消收藏文章 DELETE params: article_id, favorites_id, token
-GET /api/v1//v1/favorites/    # 创建收藏夹  POST   params: name, token
 GET /api/v1//v1/feeds/    # 获取feeds GET   params: start, end, token
-GET /api/v1//v1/read/    # 增加阅读记录 POST ,params: article_id, token
-GET /api/v1//v1/history/    # 获取我的阅读记录 GET ,params:  token
 GET /api/v1//v1/follow/<str:followee>/
 
 # 旁观者的视角

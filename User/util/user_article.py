@@ -39,7 +39,7 @@ def feeds_pull(user, lower, upper):
 
 
 @username2user
-def get_feeds(user, lower, upper):
+def get_feeds(user,lower,upper):
     """
     Same as feeds_pull, but using offline user.feeds
     :param user:
@@ -47,5 +47,5 @@ def get_feeds(user, lower, upper):
     :param upper:
     :return: JSON response
     """
-    buf = user.get_feeds(lower, upper)
+    buf = user.get_feeds(lower,upper)
     return json_response({'feeds': [each.json() for each in buf]}, 200)

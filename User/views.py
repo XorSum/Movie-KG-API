@@ -4,14 +4,14 @@ from utils.JWT import login_required, post
 from User.util import user as user_util, user_article
 
 
-@post
+# @post
 def login(requests):
     username = requests.POST['username']
     password = requests.POST['password']
     return user_util.login(username=username, password=password)
 
 
-@post
+# @post
 def join(requests):
     username = requests.POST['username']
     nickname = requests.POST['nickname']
@@ -31,7 +31,8 @@ def follow(requests, followee):
 
 @login_required
 def publish(requests):
-    content = requests.POST['content']
+    content = requests.GET['content']
+    print('contents=',content)
     return user_article.publish(user=requests.GET['token'], content=content)
 
 
@@ -45,8 +46,9 @@ def feed_pull(requests):
     """
     return feed [lower, upper] of username
     """
-    lower, upper = map(int, requests.GET['range'].split(','))
-    return user_article.get_feeds(requests.GET['token'], lower, upper)
+    lower = int(requests.GET['lower'])
+    upper = int(requests.GET['upper'])
+    return user_article.get_feeds(requests.GET['token'], lower,upper)
 
 
 def get_article_list(requests, username):
