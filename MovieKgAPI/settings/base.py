@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ['*']
 JWT_CONFIG = {
     'SECRET_KEY': 'CHANGE_THIS',
     'ALGORITHM': 'HS256',
+    'TIME_OUT': 300,  # After $TIME_OUT seconds
 }
 
 # Application definition

@@ -55,9 +55,8 @@ def login(username, password):
     user = auth.authenticate(username=username, password=password)
     if user:
         return json_response({
-            'token': 'Hello World!',
             'info': user.json()
-        }, 200)
+        }, 200, user.token())
     return json_response(None, 400, 'Username not exist')
 
 

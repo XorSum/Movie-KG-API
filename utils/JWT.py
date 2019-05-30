@@ -4,14 +4,16 @@ from utils.json_response import json_response
 from MovieKgAPI.settings.base import JWT_CONFIG
 
 
-def encode(payload):
+def encode(user):
     """
     Encode an payload into token
     dict:param payload: data
     str:return: token
     """
-    return jwt.encode(payload, JWT_CONFIG['SECRETE_KEY'],
-                      JWT_CONFIG['ALGORITHM']).decode('utf-8')
+    return jwt.encode({
+        'username': user.username,
+        'valid_date': time.time() + JWT_CONFIG['TIME_OUT'],
+    }, JWT_CONFIG['SECRET_KEY'], JWT_CONFIG['ALGORITHM']).decode('utf-8')
 
 
 def decode(token):
@@ -21,7 +23,7 @@ def decode(token):
     dict:return:
     """
     try:
-        ret = jwt.decode(token, JWT_CONFIG['SECRETE_KEY'], JWT_CONFIG['ALGORITHM'])
+        ret = jwt.decode(token, JWT_CONFIG['SECRET_KEY'], JWT_CONFIG['ALGORITHM'])
     except Exception:
         return None
     return ret

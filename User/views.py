@@ -1,8 +1,10 @@
 from utils.json_response import json_response
 from utils.JWT import login_required
+from utils.utils import post
 from User.util import user as user_util, user_article
 
 
+@post
 def login(requests):
     username = requests.POST['username']
     password = requests.POST['password']

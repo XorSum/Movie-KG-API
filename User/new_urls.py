@@ -1,11 +1,12 @@
 from django.urls import path
 
 from Subject.views import hello
+from User import views
 
 urlpatterns = [
 
     # 主动的操作
-    path('login/', hello),  # POST  params: username, password
+    path('login/', views.login, name='api.login'),  # POST  params: username, password
     path('join/', hello),  # POST    params: username, nickname, password
     path('article/', hello),  # 发表文章 POST   params: contend , movieId, personId, token
     path('article/<int:article_id>/favorites/', hello),  # 查看某文章被我收藏在哪些收藏夹里 GET, params: article_id, token

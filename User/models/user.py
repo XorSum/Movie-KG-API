@@ -4,6 +4,7 @@ from User.models.favorites import Favorites
 from User.models.readhistory import ReadHistory
 from User.models.usermanager import UserManager
 from User.models.article import Article
+from utils.JWT import encode
 
 
 class User(AbstractBaseUser):
@@ -48,6 +49,9 @@ class User(AbstractBaseUser):
             'nickname': self.nickname,
             'article_count': self.article_count
         }
+
+    def token(self):
+        return encode(self)
 
     def follow_list(self):
         """
