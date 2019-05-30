@@ -41,23 +41,24 @@ def join(username, nickname, password):
     except ObjectDoesNotExist:
         user = User.objects.create_user(username=username, nickname=nickname, password=password)
         user.save()
-        return json_response(None, 201)
+        return json_response({
+            'info': user.json()
+        }, 201, user.token())
     return json_response(None, 500, 'Username duplicated')
 
 
 def login(username, password):
     """
     Login check
-    :param username:
-    :param password:
-    :return: User object for success or None
+    str:param username:
+    str:param password:
+    User Model:return: User object for success or None
     """
     user = auth.authenticate(username=username, password=password)
     if user:
         return json_response({
-            'token': 'Hello World!',
             'info': user.json()
-        }, 200)
+        }, 200, user.token())
     return json_response(None, 400, 'Username not exist')
 
 

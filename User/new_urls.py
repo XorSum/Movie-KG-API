@@ -1,12 +1,13 @@
 from django.urls import path
 
 from Subject.views import hello
+from User import views
 
 urlpatterns = [
 
     # 主动的操作
-    path('login/', hello),  # POST  params: username, password
-    path('join/', hello),  # POST    params: username, nickname, password
+    path('login/', views.login, name='api.login'),  # POST  params: username, password
+    path('join/', views.join, name='api.join'),  # POST    params: username, nickname, password
     path('article/', hello),  # 发表文章 POST   params: contend , movieId, personId, token
     path('article/<int:article_id>/favorites/', hello),  # 查看某文章被我收藏在哪些收藏夹里 GET, params: article_id, token
     path('favorites/<int:favorites_id>/', hello),  # 收藏文章 POST params: article_id, favorites_id, token
@@ -15,6 +16,7 @@ urlpatterns = [
     path('feeds/', hello),  # 获取feeds GET   params: start, end, token
     path('read/', hello),  # 增加阅读记录 POST ,params: article_id, token
     path('history/', hello),  # 获取我的阅读记录 GET ,params:  token
+    path('follow/<str:followee>/', views.follow, name='api.follow'),
 
     # 旁观者的视角
     path('user/<str:username>/articles/', hello),  # 获取某人的文章 GET params: username

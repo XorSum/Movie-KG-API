@@ -27,6 +27,12 @@ SECRET_KEY = 'jubjn63dr816u91is6&ndfa1dbjsa=*8c(ki%#(6e8amcbg^8_'
 
 ALLOWED_HOSTS = ['*']
 
+JWT_CONFIG = {
+    'SECRET_KEY': 'CHANGE_THIS',
+    'ALGORITHM': 'HS256',
+    'TIME_OUT': 3000,  # After $TIME_OUT seconds
+}
+
 # Application definition
 
 INSTALLED_APPS = [
