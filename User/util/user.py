@@ -43,7 +43,7 @@ def join(username, nickname, password):
         user.save()
         return json_response({
             'info': user.json()
-        }, 201, user.token())
+        }, 200, user.token())
     return json_response(None, 500, 'Username duplicated')
 
 

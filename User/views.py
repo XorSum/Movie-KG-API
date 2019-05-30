@@ -1,3 +1,4 @@
+from User.models import User
 from utils.json_response import json_response
 from utils.JWT import login_required, post
 from User.util import user as user_util, user_article
@@ -29,19 +30,9 @@ def follow(requests, followee):
 
 
 @login_required
-def follow_list(requests):
-    return user_util.follow_list(user=requests.GET['token'])
-
-
-@login_required
 def publish(requests):
     content = requests.POST['content']
     return user_article.publish(user=requests.GET['token'], content=content)
-
-
-@login_required
-def article_list(requests):
-    return user_article.article_list(user=requests.GET['token'])
 
 
 @login_required
@@ -56,3 +47,50 @@ def feed_pull(requests):
     """
     lower, upper = map(int, requests.GET['range'].split(','))
     return user_article.get_feeds(requests.GET['token'], lower, upper)
+
+
+def get_article_list(requests, username):
+    try:
+        print("username=", username)
+        user = User.objects.get(username=username)
+    except:
+        return json_response('', 400)
+
+    return json_response(user.article_list(), 200)
+
+
+def get_public_favorites(requests, username):
+    try:
+        print("username=", username)
+        user = User.objects.get(username=username)
+    except:
+        return json_response('', 400)
+    return json_response(user.get_favorites_list(), 200)
+
+
+def get_favorites(requests, username, favorite_id):
+    try:
+        print("username=", username)
+        user = User.objects.get(username=username)
+        favorite = user.favorites_set.get(id=favorite_id)
+    except:
+        return json_response('', 400)
+    return json_response(favorite.json(show_articles=True), 200)
+
+
+def get_followers(requests, username):
+    try:
+        print("username=", username)
+        user = User.objects.get(username=username)
+    except:
+        return json_response('', 400)
+    return json_response(user.follow_list(), 200)
+
+
+def get_idols(requests, username):
+    try:
+        print("username=", username)
+        user = User.objects.get(username=username)
+    except:
+        return json_response('', 400)
+    return json_response(user.idol_list(), 200)

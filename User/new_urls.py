@@ -2,6 +2,7 @@ from django.urls import path
 
 from Subject.views import hello
 from User import views
+from User.util import user
 
 urlpatterns = [
 
@@ -19,9 +20,9 @@ urlpatterns = [
     path('follow/<str:followee>/', views.follow, name='api.follow'),
 
     # 旁观者的视角
-    path('user/<str:username>/articles/', hello),  # 获取某人的文章 GET params: username
-    path('user/<str:username>/public_favorites/', hello),  # 获取某人的公开收藏夹列表 GET params: username
-    path('user/<str:username>/favorites/', hello),  # 获取某人的某个收藏夹中的文章 GET params: usename, favorite_id,
-    path('user/<str:username>/followers/', hello),  # 获取某人的追随者, GET , params: username
-    path('user/<str:username>/idols/', hello),  # 获取某人追随的人, GET , params: username
+    path('user/<username>/articles/', views.get_article_list),  # 获取某人的文章 GET params: username
+    path('user/<username>/public_favorites/', views.get_public_favorites),  # 获取某人的公开收藏夹列表 GET params: username
+    path('user/<str:username>/favorites/<int:favorite_id>/', views.get_favorites), # 获取某人的某个收藏夹中的文章 GET params: usename, favorite_id,
+    path('user/<str:username>/followers/', views.get_followers),  # 获取某人的追随者, GET , params: username
+    path('user/<str:username>/idols/', views.get_idols),  # 获取某人追随的人, GET , params: username
 ]

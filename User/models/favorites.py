@@ -15,7 +15,8 @@ class Favorites(models.Model):
         unique_together = ('user', 'name')
 
     def json(self, show_articles=False, show_user=False):
-        result = {'name': self.name,
+        result = {'id': self.id,
+                  'name': self.name,
                   'private': self.private}
         if show_articles:
             result['articles'] = [each.json() for each in self.articles.all()]

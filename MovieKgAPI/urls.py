@@ -23,5 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/subject/', include('Subject.urls')),
     path('api/v1/', include('User.new_urls')),
-    url(r'^silk/', include('silk.urls', namespace='silk')),
+    # url(r'^silk/', include('silk.urls', namespace='silk')),
 ]

@@ -53,6 +53,17 @@ class User(AbstractBaseUser):
     def token(self):
         return encode(self)
 
+    def idol_list(self):
+        """
+        返回关注的人的列表
+        :return:
+        """
+        ret = []
+        for each in User.objects.filter(following=self).all():
+            ret.append(each.json())
+        return ret
+
+
     def follow_list(self):
         """
         :return: self's follow list in JSON
