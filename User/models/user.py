@@ -6,13 +6,11 @@ from User.models.usermanager import UserManager
 from User.models.article import Article
 
 
-
 class User(AbstractBaseUser):
     username = models.CharField(verbose_name='用户名', primary_key=True, editable=False, unique=True, max_length=18)
     nickname = models.CharField(verbose_name='用户昵称', max_length=32)
     is_active = models.BooleanField(verbose_name='用户可用', default=True)
     is_admin = models.BooleanField(verbose_name='管理员用户', default=False)
-    article_count = models.IntegerField(default=0, verbose_name='推文数量', editable=False)
     following = models.ManyToManyField('User.User', verbose_name="我关注的人")
     feeds = models.ManyToManyField('User.Article', related_name="feeds", verbose_name="feeds")
 
@@ -47,7 +45,7 @@ class User(AbstractBaseUser):
         return {
             'username': self.username,
             'nickname': self.nickname,
-            'article_count': self.article_count
+            'article_count': self.article_set.count()
         }
 
     # def token(self):
@@ -58,61 +56,21 @@ class User(AbstractBaseUser):
         返回关注的人的列表
         :return:
         """
-        ret = []
-        for each in User.objects.filter(following=self).all():
-            ret.append(each.json())
-        return ret
-
+        return User.objects.filter(following=self).all()
 
     def follow_list(self):
         """
-        :return: self's follow list in JSON
+        :return: 我关注的人们
         """
-        ret = []
-        for each in self.following.all():
-            ret.append(each.json())
-        return ret
+        return self.following.all()
 
-    def follow(self, followee):
-        """
-        self follow followee
-        :param followee:
-        :return: None
-        """
-        self.following.add(followee)
-
-    def publish(self, content):
-        """
-        Publish an article
-        :param content:
-        :return: None
-        """
-        article = Article.objects.create(content=content, user=self)
-        self.article_count += 1
-        self.save()
-        followers = self.user_set.all()
-        for each in followers:
-            each.feeds.add(article)
-        return article
-
-    def get_feeds(self,lower,upper):
-        """
-        get self's feed of [lower, upper]
-        :param lower:
-        :param upper:
-        :return: Query set
-        """
-        lower = max(lower,0)
-        upper = min(upper,lower+20)
-        return self.feeds.all().order_by('-created_date')[lower:upper]
 
     def article_list(self):
         """
         Self's article list sorted by time, minimal index for newest article
         :return: Array
         """
-        buf = Article.objects.filter(user=self).order_by('-created_date')
-        return [each.json() for each in buf]
+        return self.article_set.all().order_by('-created_date')
 
     def read(self, article):
         """
@@ -121,31 +79,22 @@ class User(AbstractBaseUser):
         :return: None
         """
         ReadHistory.objects.create(user=self, article=article)
-        return None
+        return True
 
     def read_history(self):
         """
         获取阅读历史
         :return: list of ReadHistories
         """
-        buf = ReadHistory.objects.filter(user=self)
-        return [each.json() for each in buf]
+        return ReadHistory.objects.filter(user=self)
 
-    def create_favorites(self, favorites_name, private):
-        """
-        创建收藏夹
-        :param favorites_name:
-        :return: Favorite对象
-        """
-        Favorites.objects.create(user=self, name=favorites_name, private=private)
-        return self.favorites_set.filter(name=favorites_name).first()
 
     def get_favorites_list(self):
         """
         获取收藏夹列表
         :return: list of json
         """
-        return [each.json() for each in self.favorites_set.all()]
+        return self.favorites_set.all()
 
     class Meta:
         verbose_name = '用户'

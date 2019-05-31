@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from User.models import User
-from User.util import user, user_article
+from User.service import user_service, article_service
 
 import json
 
@@ -24,13 +24,13 @@ class UserTestCase(TestCase):
         :return:
         """
         for i in range(cls.n):
-            user.join(username=s('user', i), nickname=s('nick', i), password='test')
+            user_service.join(username=s('user', i), nickname=s('nick', i), password='test')
         user0 = User.objects.get(username='user0')
         for i in range(1, cls.n):
-            user.follow(user0, s('user', i))
+            user_service.follow(user0, s('user', i))
         for i in range(cls.n << 2):
             useri = User.objects.get(username=s('user', i % cls.n))
-            user_article.publish(useri, s('content', i))
+            article_service.publish(useri, s('content', i))
 
     def test_feed_pull(self):
         def check(array):
@@ -44,7 +44,7 @@ class UserTestCase(TestCase):
             return flag
 
         user0 = User.objects.get(username=s('user', 0))
-        feeds = user_article.get_feeds_slow(user0, 0, 19)
+        feeds = article_service.get_feeds_slow(user0, 0, 19)
         feeds = json_response2json(feeds)
         self.assertEqual(feeds['status'], 200)
         self.assertTrue(check(array=feeds['data']['feeds']))
@@ -61,20 +61,11 @@ class UserTestCase(TestCase):
             return flag
 
         user0 = User.objects.get(username=s('user', 0))
-        feeds = user_article.get_feeds_fast(user0, 0, 19)
+        feeds = article_service.get_feeds_fast(user0, 0, 19)
         feeds = json_response2json(feeds)
         self.assertEqual(feeds['status'], 200)
         self.assertTrue(check(array=feeds['data']['feeds']))
 
-    def test_diff_push_pull(self):
-        user0 = User.objects.get(username=s('user', 0))
-        pull = user_article.get_feeds_slow(user0, 0, 19)
-        for each in pull:
-            print(each)
-        push = user_article.get_feeds_fast(user0, 0, 19)
-        for each in push:
-            print(each)
-        self.assertEqual(pull.content, push.content)
 
     def test_many2many_reverse_query(self):
         index = 2

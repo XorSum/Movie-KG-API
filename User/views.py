@@ -1,9 +1,27 @@
 import logging
 
-from User.models import User
+from django.shortcuts import get_object_or_404
+
+from User.models import User, Article, Favorites
 from utils.json_response import json_response
 from utils.JWT import login_required
-from User.util import user as user_util, user_article
+from User.service import user_service as user_util, article_service
+
+
+def none2reponse(func):
+    """
+    如过func的返回值是None,则将返回值修改为json_response(None,500)
+    :param func:
+    :return: json_response
+    """
+
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+        if result == None:
+            result = json_response(None, 500)
+        return result
+
+    return wrapper
 
 
 def login(requests):
@@ -11,41 +29,79 @@ def login(requests):
     password = requests.POST.get('password', None)
     if username == None or password == None:
         return json_response(None, 400)
-    logging.info('user login: username=%s, password=%s' % (username,password) )
+    logging.info('user login: username=%s, password=%s' % (username, password))
     return user_util.login(username=username, password=password)
 
 
 def join(requests):
-    username = requests.POST.get('username',None)
-    nickname = requests.POST.get('nickname',None)
-    password = requests.POST.get('password',None)
+    username = requests.POST.get('username', None)
+    nickname = requests.POST.get('nickname', None)
+    password = requests.POST.get('password', None)
     if username == None or nickname == None or password == None:
         return json_response(None, 400)
-    logging.info('user join: username=%s, nickname=%s, password=%s' % (username,nickname, password))
-
+    logging.info('user join: username=%s, nickname=%s, password=%s' % (username, nickname, password))
     return user_util.join(username=username, nickname=nickname, password=password)
-
-
-def user_detail(requests, username):
-    user = user_util.get_user_or_none(user=username)
-    return json_response(user.json(), 200) if user else json_response(None, 400, 'Username not exist')
-
-
-@login_required
-def follow(requests, followee):
-    return user_util.follow(follower=requests.GET['token'], followee=followee)
 
 
 @login_required
 def publish(requests):
     content = requests.POST.get('content', None)
-    print('contents=', content)
-    return user_article.publish(user=requests.GET['token'], content=content)
+    logging.info('contents= %s' % (content))
+    return article_service.publish(user=requests.GET['user'], content=content,
+                                   movie=None, person=None)
 
 
 @login_required
-def view_article(requests, username, post_id):
-    return user_article.view_article(user=username, post_id=post_id)
+def in_which_favorites(requests, post_id):
+    article = get_object_or_404(Article, post_id=post_id)
+    user = requests.GET['user']
+    result = []
+    for each in user.favorites_set.all():
+        data = {'favorites_name': each.name,
+                'favorites_id': each.id,
+                'private': each.private,
+                'exits': each.articles.filter(post_id=post_id).count() > 0
+                }
+        result.append(data)
+    return json_response({'favorites': result}, 200)
+
+
+@login_required
+def add_favorites(requests, post_id, favorites_id):
+    user = requests.GET['user']
+    favorite = get_object_or_404(Favorites, id=favorites_id)
+    article = get_object_or_404(Article, post_id=post_id)
+    if favorite.user != user:
+        return json_response(None, 400)
+    favorite.articles.add(article)
+    return json_response(favorite.json(show_articles=True), 200)
+
+
+@login_required
+def delete_favorites(requests, post_id, favorites_id):
+    user = requests.GET['user']
+    favorite = get_object_or_404(Favorites, id=favorites_id)
+    article = get_object_or_404(Article, post_id=post_id)
+    if favorite.user != user:
+        return json_response(None, 400)
+    favorite.articles.remove(article)
+    return json_response(favorite.json(show_articles=True), 200)
+
+
+@login_required
+def create_favorites(requests):
+    name = requests.GET.get('name', None)
+    private = requests.GET.get('private', None)
+    if name == None or private == None:
+        return json_response(None, 400)
+    favorite = Favorites.objects.create(user=requests.GET['user'], name=name, private=private)
+    return json_response(favorite.json(), 200)
+
+
+@login_required
+def follow(requests, followee_name):
+    followee = get_object_or_404(User, username=followee_name)
+    return user_util.follow(follower=requests.GET['user'], followee=followee)
 
 
 @login_required
@@ -56,11 +112,9 @@ def feed_pull(requests):
     try:
         lower = int(requests.GET['lower'])
         upper = int(requests.GET['upper'])
-        logging.info('feddpull user=%s, lower=%s, upper=%s' % (requests.GET['token'].username, lower, upper))
     except:
         return json_response(None, 400)
-    return user_article.get_feeds_fast(requests.GET['token'], lower, upper)
-    # return user_article.get_feeds_slow(requests.GET['token'], lower, upper)
+    return article_service.get_feeds_fast(requests.GET['user'], lower, upper)
 
 
 def get_article_list(requests, username):
@@ -103,7 +157,7 @@ def get_followers(requests, username):
 
 def get_idols(requests, username):
     try:
-        logging.info('username=%s'%(username))
+        logging.info('username=%s' % (username))
         user = User.objects.get(username=username)
     except:
         return json_response('', 400)

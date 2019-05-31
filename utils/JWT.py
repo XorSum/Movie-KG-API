@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from User.models import User
 from utils.json_response import json_response
 from MovieKgAPI.settings.base import JWT_CONFIG
-
+from django.shortcuts import get_object_or_404
 
 def post(func):
     def wrapper(requests, *args, **kwargs):
@@ -42,29 +42,27 @@ def decode(token):
 
 
 def login_required(func):
+    """
+    在request.GET或者request.POST中拿到token,检查，然后将合法user放到requests.GET['user']
+    :param func:
+    :return:
+    """
     def wrapper(requests, *args, **kwargs):
         token = requests.GET.get('token',None)
         if token == None:
             token = requests.POST.get('token',None)
         if token == None:
-            return json_response(None, 400)
-
-
-        print("token=", token)
-        requests.GET = requests.GET.copy()
+            return json_response(None, 400,'token needed')
         payload = decode(token)
-        print("payload=", payload)
         if payload:
             now = time.time()
-            print("now=", now)
             if float(payload['valid_date']) >= now:
-                try:
-                    requests.GET['token'] = User.objects.get(username=payload['username'])
-                except ObjectDoesNotExist:
-                    return json_response(None, 400, 'Username not exist')
+                user = get_object_or_404(User,username=payload['username'])
+                requests.GET = requests.GET.copy()
+                requests.GET['user'] = user
                 return func(requests, *args, **kwargs)
             else:
                 return json_response(None, 401, 'Out Of Time')
-        return json_response(None, 401)
-
+        else:
+            return json_response(None, 400,'invalid token')
     return wrapper

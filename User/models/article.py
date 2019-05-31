@@ -25,12 +25,3 @@ class Article(models.Model):
     class Meta:
         verbose_name = '动态'
         verbose_name_plural = '动态'
-
-    def in_which_favorites(self, user):
-        return [each.json() for each in self.favorites_set.filter(user=user).all()]
-
-    def add_to_favorites(self, favorites):
-        favorites.add_article(self)
-
-    def remove_from_favorites(self, favorites):
-        favorites.remove_article(self)

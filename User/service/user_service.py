@@ -7,8 +7,6 @@ from django.db.models import ObjectDoesNotExist
 from django.contrib import auth
 
 
-
-
 def get_user_or_none(user):
     """
     Query username from db
@@ -57,11 +55,10 @@ def login(username, password):
 
 
 def follow(follower, followee):
-    followee = get_user_or_none(followee)
-    if follower and followee:
-        follower.follow(followee)
-        logging.info('%s followed %s success' % (follower.nickname, followee.nickname))
-        return json_response(None, 200, '%s followed %s success' % (follower.nickname, followee.nickname))
-    return json_response(None, 400, 'Username not exist')
+    follower.following.add(followee)
+    for article in followee.article_set.all():
+        follower.feeds.add(article)
+    logging.info('%s followed %s success' % (follower.username, followee.username))
+    return json_response(None, 200, '%s followed %s success' % (follower.username, followee.username))
 
 
