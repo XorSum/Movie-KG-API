@@ -1,3 +1,5 @@
+import logging
+
 from User.models import User
 from utils.JWT import encode
 from utils.json_response import json_response
@@ -58,7 +60,8 @@ def follow(follower, followee):
     followee = get_user_or_none(followee)
     if follower and followee:
         follower.follow(followee)
-        return json_response(None, 200, '%s stared %s success' % (follower.nickname, followee.nickname))
+        logging.info('%s followed %s success' % (follower.nickname, followee.nickname))
+        return json_response(None, 200, '%s followed %s success' % (follower.nickname, followee.nickname))
     return json_response(None, 400, 'Username not exist')
 
 

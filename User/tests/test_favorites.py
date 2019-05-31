@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from User.models import User, Article
+from User.models import User, Article, Favorites
 
 
 class FavotitesTestCase(TestCase):
@@ -19,8 +19,9 @@ class FavotitesTestCase(TestCase):
 
     def test_create_favorites(self):
         han = User.objects.get(username='hantiaotiao')
-        han.create_favorites(favorites_name='pub_fav', private=False)
-        han.create_favorites(favorites_name='pri_fav', private=True)
+        fav1 = han.create_favorites(favorites_name='pub_fav', private=False)
+        fav2 = Favorites.objects.get(name='pub_fav')
+        self.assertEqual(fav1,fav2)
 
     def test_add_article(self):
         han = User.objects.get(username='hantiaotiao')

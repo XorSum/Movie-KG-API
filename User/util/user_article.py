@@ -1,3 +1,5 @@
+import logging
+
 from utils.json_response import json_response
 from User.models.article import Article
 from django.db.models import ObjectDoesNotExist
@@ -12,15 +14,11 @@ def view_article(user, post_id):
 
 
 def publish(user, content):
-    user.publish(content)
-    return json_response(None, 201)
+    article = user.publish(content)
+    return json_response(article.json(), 200)
 
 
-def article_list(user):
-    return json_response({'articles': user.article_list()}, 200)
-
-
-def feeds_pull(user, lower, upper):
+def get_feeds_slow(user, lower, upper):
     """
     Pull feeds in [lower, upper] of user
     :param user:
@@ -28,12 +26,15 @@ def feeds_pull(user, lower, upper):
     :param upper:
     :return: JSON response
     """
+    logging.info("get_feeds_slow user=%s, lower=%s, upper=%s"%(user.username,lower,upper))
+    lower = max(0,lower)
+    upper = min(upper,lower+20)
     buf = Article.objects.filter(
-        user__in=user.following.all()).order_by('-created_date')[lower - 1: upper]
+        user__in=user.following.all()).union(user.article_set.all()).order_by('-created_date')[lower : upper]
     return json_response({'feeds': [each.json() for each in buf]}, 200)
 
 
-def get_feeds(user, lower, upper):
+def get_feeds_fast(user, lower, upper):
     """
     Same as feeds_pull, but using offline user.feeds
     :param user:
@@ -41,5 +42,6 @@ def get_feeds(user, lower, upper):
     :param upper:
     :return: JSON response
     """
+    logging.info("get_feeds_fast user=%s, lower=%s, upper=%s" % (user.username, lower, upper))
     buf = user.get_feeds(lower, upper)
     return json_response({'feeds': [each.json() for each in buf]}, 200)

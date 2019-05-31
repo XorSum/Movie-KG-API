@@ -1,19 +1,28 @@
+import logging
+
 from User.models import User
 from utils.json_response import json_response
-from utils.JWT import login_required, post
+from utils.JWT import login_required
 from User.util import user as user_util, user_article
 
 
 def login(requests):
-    username = requests.POST.get('username')
-    password = requests.POST.get('password')
+    username = requests.POST.get('username', None)
+    password = requests.POST.get('password', None)
+    if username == None or password == None:
+        return json_response(None, 400)
+    logging.info('user login: username=%s, password=%s' % (username,password) )
     return user_util.login(username=username, password=password)
 
 
 def join(requests):
-    username = requests.POST.get('username')
-    nickname = requests.POST.get('nickname')
-    password = requests.POST.get('password')
+    username = requests.POST.get('username',None)
+    nickname = requests.POST.get('nickname',None)
+    password = requests.POST.get('password',None)
+    if username == None or nickname == None or password == None:
+        return json_response(None, 400)
+    logging.info('user join: username=%s, nickname=%s, password=%s' % (username,nickname, password))
+
     return user_util.join(username=username, nickname=nickname, password=password)
 
 
@@ -29,8 +38,8 @@ def follow(requests, followee):
 
 @login_required
 def publish(requests):
-    content = requests.POST.get('content',None)
-    print('contents=',content)
+    content = requests.POST.get('content', None)
+    print('contents=', content)
     return user_article.publish(user=requests.GET['token'], content=content)
 
 
@@ -44,14 +53,19 @@ def feed_pull(requests):
     """
     return feed [lower, upper] of username
     """
-    lower = int(requests.GET['lower'])
-    upper = int(requests.GET['upper'])
-    return user_article.get_feeds(requests.GET['token'], lower,upper)
+    try:
+        lower = int(requests.GET['lower'])
+        upper = int(requests.GET['upper'])
+        logging.info('feddpull user=%s, lower=%s, upper=%s' % (requests.GET['token'].username, lower, upper))
+    except:
+        return json_response(None, 400)
+    return user_article.get_feeds_fast(requests.GET['token'], lower, upper)
+    # return user_article.get_feeds_slow(requests.GET['token'], lower, upper)
 
 
 def get_article_list(requests, username):
     try:
-        print("username=", username)
+        logging.info('username=%s' % (username))
         user = User.objects.get(username=username)
     except:
         return json_response('', 400)
@@ -61,7 +75,7 @@ def get_article_list(requests, username):
 
 def get_public_favorites(requests, username):
     try:
-        print("username=", username)
+        logging.info('username=%s' % (username))
         user = User.objects.get(username=username)
     except:
         return json_response('', 400)
@@ -70,7 +84,7 @@ def get_public_favorites(requests, username):
 
 def get_favorites(requests, username, favorite_id):
     try:
-        print("username=", username)
+        logging.info('username=%s' % (username))
         user = User.objects.get(username=username)
         favorite = user.favorites_set.get(id=favorite_id)
     except:
@@ -80,7 +94,7 @@ def get_favorites(requests, username, favorite_id):
 
 def get_followers(requests, username):
     try:
-        print("username=", username)
+        logging.info('username=%s' % (username))
         user = User.objects.get(username=username)
     except:
         return json_response('', 400)
@@ -89,7 +103,7 @@ def get_followers(requests, username):
 
 def get_idols(requests, username):
     try:
-        print("username=", username)
+        logging.info('username=%s'%(username))
         user = User.objects.get(username=username)
     except:
         return json_response('', 400)
