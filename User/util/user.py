@@ -1,4 +1,5 @@
 from User.models import User
+from utils.JWT import encode
 from utils.json_response import json_response
 from django.db.models import ObjectDoesNotExist
 from django.contrib import auth
@@ -34,7 +35,7 @@ def join(username, nickname, password):
         user.save()
         return json_response({
             'info': user.json()
-        }, 200, user.token())
+        }, 200, encode(user))
     return json_response(None, 500, 'Username duplicated')
 
 
@@ -49,7 +50,7 @@ def login(username, password):
     if user:
         return json_response({
             'info': user.json()
-        }, 200, user.token())
+        }, 200, encode(user))
     return json_response(None, 400, 'Username not exist')
 
 

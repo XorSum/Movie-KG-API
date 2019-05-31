@@ -9,12 +9,6 @@ from utils.json_response import json_response
 from MovieKgAPI.settings.base import JWT_CONFIG
 
 
-def post(func):
-    def wrapper(requests, *args, **kwargs):
-        requests.POST = json.loads(requests.body.decode('utf-8'))
-        return func(requests, *args, **kwargs)
-
-    return wrapper
 
 
 def encode(user):
@@ -44,22 +38,28 @@ def decode(token):
 
 def login_required(func):
     def wrapper(requests, *args, **kwargs):
-        if 'token' in requests.GET:
-            print("token=", requests.GET['token'])
-            requests.GET = requests.GET.copy()
-            payload = decode(requests.GET['token'])
-            print("payload=", payload)
-            if payload:
-                now = time.time()
-                print("now=", now)
-                if float(payload['valid_date']) >= now:
-                    try:
-                        requests.GET['token'] = User.objects.get(username=payload['username'])
-                    except ObjectDoesNotExist:
-                        return json_response(None, 400, 'Username not exist')
-                    return func(requests, *args, **kwargs)
-                else:
-                    return json_response(None, 401, 'Out Of Time')
+        token = requests.GET.get('token',None)
+        if token == None:
+            token = requests.POST.get('token',None)
+        if token == None:
+            return json_response(None, 400)
+
+
+        print("token=", token)
+        requests.GET = requests.GET.copy()
+        payload = decode(token)
+        print("payload=", payload)
+        if payload:
+            now = time.time()
+            print("now=", now)
+            if float(payload['valid_date']) >= now:
+                try:
+                    requests.GET['token'] = User.objects.get(username=payload['username'])
+                except ObjectDoesNotExist:
+                    return json_response(None, 400, 'Username not exist')
+                return func(requests, *args, **kwargs)
+            else:
+                return json_response(None, 401, 'Out Of Time')
         return json_response(None, 401)
 
     return wrapper

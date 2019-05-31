@@ -4,18 +4,16 @@ from utils.JWT import login_required, post
 from User.util import user as user_util, user_article
 
 
-# @post
 def login(requests):
-    username = requests.POST['username']
-    password = requests.POST['password']
+    username = requests.POST.get('username')
+    password = requests.POST.get('password')
     return user_util.login(username=username, password=password)
 
 
-# @post
 def join(requests):
-    username = requests.POST['username']
-    nickname = requests.POST['nickname']
-    password = requests.POST['password']
+    username = requests.POST.get('username')
+    nickname = requests.POST.get('nickname')
+    password = requests.POST.get('password')
     return user_util.join(username=username, nickname=nickname, password=password)
 
 
@@ -31,7 +29,7 @@ def follow(requests, followee):
 
 @login_required
 def publish(requests):
-    content = requests.GET['content']
+    content = requests.POST.get('content',None)
     print('contents=',content)
     return user_article.publish(user=requests.GET['token'], content=content)
 
