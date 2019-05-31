@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ['*']
 JWT_CONFIG = {
     'SECRET_KEY': 'CHANGE_THIS',
     'ALGORITHM': 'HS256',
-    'TIME_OUT': 3000,  # After $TIME_OUT seconds
+    'TIME_OUT': 259200,  # after 3 days
 }
 
 # Application definition
@@ -43,9 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
-    # 'corsheaders',
     # 'silk',
-    'rdf',
     'User',
     'Subject',
 ]
@@ -53,10 +51,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -112,7 +107,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-# LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Shanghai'
 LANGUAGE_CODE = 'zh-hans'
@@ -127,25 +121,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-FUSEKI_ENDPOINT_URL = 'http://127.0.0.1:3030/kg_demo_movie/query'
-
-external_dict = ['./utils/external_dict/movie_title.txt', './utils/external_dict/person_name.txt']
-
-
-AUTH_USER_MODEL = "User.User"
-
-# MONGODB_URI = "mongodb://movie_lion:movie_lion@editme.top:27017/"
-
-# MONGO_HOST = "editme.top"
-# MONGO_USER = "movie_lion"
-# MONGO_PWD = "movie_lion"
-MONGO_HOST = "localhost"
-MONGO_PORT = 27017
-MONGO_DB = "movie_lion"
-
-
 STATIC_ROOT = os.path.join(BASE_DIR, "static/static")
 
+AUTH_USER_MODEL = "User.User"
 
 logging.basicConfig(level=logging.DEBUG)

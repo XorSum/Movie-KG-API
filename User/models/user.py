@@ -13,7 +13,7 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(verbose_name='用户可用', default=True)
     is_admin = models.BooleanField(verbose_name='管理员用户', default=False)
     article_count = models.IntegerField(default=0, verbose_name='推文数量', editable=False)
-    following = models.ManyToManyField('User.User', verbose_name="关注者")
+    following = models.ManyToManyField('User.User', verbose_name="我关注的人")
     feeds = models.ManyToManyField('User.Article', related_name="feeds", verbose_name="feeds")
 
     objects = UserManager()

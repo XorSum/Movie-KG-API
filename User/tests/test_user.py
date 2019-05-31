@@ -8,6 +8,7 @@ import json
 def s(name, i):
     return '%s%s' % (name, i)
 
+# django
 
 def json_response2json(response):
     return json.loads(response.content.decode())

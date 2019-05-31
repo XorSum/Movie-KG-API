@@ -30,8 +30,9 @@ def get_feeds_slow(user, lower, upper):
     lower = max(0,lower)
     upper = min(upper,lower+20)
     buf = Article.objects.filter(
-        user__in=user.following.all()).union(user.article_set.all()).order_by('-created_date')[lower : upper]
-    return json_response({'feeds': [each.json() for each in buf]}, 200)
+        user__in=user.following.all()).union(user.article_set.all()).order_by('-created_date')
+    print("len = ",len(buf))
+    return json_response({'feeds': [each.json() for each in buf[lower : upper]]}, 200)
 
 
 def get_feeds_fast(user, lower, upper):
@@ -42,6 +43,6 @@ def get_feeds_fast(user, lower, upper):
     :param upper:
     :return: JSON response
     """
-    logging.info("get_feeds_fast user=%s, lower=%s, upper=%s" % (user.username, lower, upper))
     buf = user.get_feeds(lower, upper)
+    print("len = ", len(buf))
     return json_response({'feeds': [each.json() for each in buf]}, 200)
