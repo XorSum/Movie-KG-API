@@ -16,17 +16,18 @@ class Movie(models.Model):
     def __str__(self):
         return "Movie: " + self.title + "-" + str(self.id)
 
-    def json(self, show_person=False, show_video=False):
+    def json(self, show_all):
         """
         序列化
         """
         data = to_dict(self, ['id', 'year', 'title', 'rating', 'summary', 'original_title'])
         data['url'] = '/subject/movie/' + str(self.id) + '/'
         data['type'] = 'movie'
-        if show_person:
-            data['persons'] = [mp.json(show_person=True) for mp in MoviePerson.objects.filter(movie=self).all()]
-        if show_video:
-            data['videos'] = [video.json() for video in MovieVideo.objects.filter(movie=self).all()]
+        if show_all:
+            data['persons'] = [mp.json(show_person=True) for mp in self.movieperson_set.all()[0:20]]
+            data['videos'] = [video.json() for video in self.movievideo_set.all()[0:20]]
+            data['tags'] = [tag.tag for tag in self.movietag_set.all()[0:20]]
+            data['genres'] = [genre.genre for genre in self.moviegenre_set.all()[0:20]]
         return data
 
 
@@ -42,12 +43,12 @@ class Person(models.Model):
     def __str__(self):
         return "Person: " + self.name + "-" + str(self.id)
 
-    def json(self, show_movie=False):
+    def json(self, show_all):
         data = to_dict(self, ['id', 'name', 'gender', 'name_en', 'summary', 'birthday', 'bornplace'])
         data['url'] = '/subject/person/' + str(self.id) + '/'
         data['type'] = 'person'
-        if show_movie:
-            data['movies'] = [mp.json(show_movie=True) for mp in MoviePerson.objects.filter(person=self).all()]
+        if show_all:
+            data['movies'] = [mp.json(show_movie=True) for mp in self.movieperson_set.all()[0:20]]
         return data
 
 
@@ -59,12 +60,12 @@ class MoviePerson(models.Model):
     def __str__(self):
         return "Movie Person: " + self.movie.title + " - " + self.person.name + " - " + self.role
 
-    def serialize(self, show_movie=False, show_person=False):
+    def json(self, show_movie=False, show_person=False):
         data = {'role': self.role}
         if show_person:
-            data['person'] = self.person.json()
+            data['person'] = self.person.json(show_all=False)
         if show_movie:
-            data['movie'] = self.movie.json()
+            data['movie'] = self.movie.json(show_all=False)
         return data
 
 
@@ -76,7 +77,7 @@ class MovieVideo(models.Model):
     def __str__(self):
         return "Movie Video: " + self.movie.title + " - " + self.sample_link
 
-    def serialize(self):
+    def json(self):
         data = to_dict(self, ['sample_link', 'source'])
         return data
 

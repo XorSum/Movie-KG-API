@@ -15,21 +15,19 @@ get接口中的参数值如果是汉字，则需要将其encodeURIComponent()
 #### User
 
 ```plain
-POST /api/v1/user/join?username=&nickname=&password=
-POST /api/v1/user/login?username=&password=
-GET /api/v1/user/<username>/log
-GET /api/v1/user/<username>/star/list
-GET /api/v1/user/<username>/star/<username>
-```
+# 主动的操作
+GET /api/v1//v1/login/    # POST  params: username, password
+GET /api/v1//v1/join/    # POST    params: username, nickname, password
+GET /api/v1//v1/article/    # 发表文章 POST   params: contend , movieId, personId, token
+GET /api/v1//v1/feeds/    # 获取feeds GET   params: start, end, token
+GET /api/v1//v1/follow/<str:followee>/
 
-#### Article
-
-```plain
-POST /api/v1/user/<username>/publish?content=
-GET /api/v1/user/<username>/articles
-GET /api/v1/user/<username>/article/<post_id>
-GET /api/v1/user/<username>/feeds?range=<lower>,<upper>
-# return feeds of user in [lower, upper] ordered by timeline
+# 旁观者的视角
+GET /api/v1//v1/user/<username>/articles/    # 获取某人的文章 GET params: username
+GET /api/v1//v1/user/<username>/public_favorites/    # 获取某人的公开收藏夹列表 GET params: username
+GET /api/v1//v1/user/<str:username>/favorites/<int:favorite_id>/   # 获取某人的某个收藏夹中的文章 GET params: usename, favorite_id,
+GET /api/v1//v1/user/<str:username>/followers/    # 获取某人的追随者, GET , params: username
+GET /api/v1//v1/user/<str:username>/idols/    # 获取某人追随的人, GET , params: username
 ```
 
 #### Subject
@@ -93,3 +91,14 @@ django会根据DJANGO_SETTINGS_MODULE这个环境变量来加载相应的setting
 阅读[manage.py](./manag.py)中的代码可知，如果没有设置DJANGO_SETTINGS_MODULE，它的默认值是MovieKgAPI.settings.dev。
 我们可以在shell中运行`export DJANGO_SETTINGS_MODULE=MovieKgAPI.settings.prod`来设置这个环境变量。
 也可以用`python manage.py migrate --settings=MovieKgAPI.settings.prod`的方式来指定环境变量。
+
+### 单元测试
+
+```bash
+python3 manage.py test
+coverage run --source '.'   manage.py test -v 2 --settings=MovieKgAPI.settings.dev
+coverage html
+```
+
+打开 htmlcov/index.html
+

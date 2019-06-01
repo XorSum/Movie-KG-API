@@ -1,18 +1,10 @@
+import logging
+
 from User.models import User
+from utils.JWT import encode
 from utils.json_response import json_response
 from django.db.models import ObjectDoesNotExist
 from django.contrib import auth
-
-
-def username2user(func):
-    def wrapper(user, *args, **kwargs):
-        try:
-            user = User.objects.get(username=user)
-        except ObjectDoesNotExist:
-            return json_response(None, 400, 'Username not exist')
-        return func(user, *args, **kwargs)
-
-    return wrapper
 
 
 def get_user_or_none(user):
@@ -43,7 +35,7 @@ def join(username, nickname, password):
         user.save()
         return json_response({
             'info': user.json()
-        }, 201, user.token())
+        }, 200, encode(user))
     return json_response(None, 500, 'Username duplicated')
 
 
@@ -58,19 +50,15 @@ def login(username, password):
     if user:
         return json_response({
             'info': user.json()
-        }, 200, user.token())
+        }, 200, encode(user))
     return json_response(None, 400, 'Username not exist')
 
 
 def follow(follower, followee):
-    follower = get_user_or_none(follower)
-    followee = get_user_or_none(followee)
-    if follower and followee:
-        follower.follow(followee)
-        return json_response(None, 200, '%s stared %s success' % (follower.nickname, followee.nickname))
-    return json_response(None, 400, 'Username not exist')
+    follower.following.add(followee)
+    for article in followee.article_set.all():
+        follower.feeds.add(article)
+    logging.info('%s followed %s success' % (follower.username, followee.username))
+    return json_response(None, 200, '%s followed %s success' % (follower.username, followee.username))
 
 
-@username2user
-def follow_list(user):
-    return json_response({'list': user.follow_list()}, 200)

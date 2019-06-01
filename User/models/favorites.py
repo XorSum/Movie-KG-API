@@ -15,26 +15,12 @@ class Favorites(models.Model):
         unique_together = ('user', 'name')
 
     def json(self, show_articles=False, show_user=False):
-        result = {'name': self.name,
-                  'private': self.private}
+        result = {'id': self.id,
+                  'name': self.name,
+                  'private': self.private,
+                  'article_count': self.articles.count()}
         if show_articles:
             result['articles'] = [each.json() for each in self.articles.all()]
         if show_user:
             result['user'] = self.user.json()
         return result
-
-    def add_article(self, article):
-        """
-        收藏一篇文章
-        :param article:
-        :return:
-        """
-        self.articles.add(article)
-        return None
-
-    def remove_article(self, article):
-        self.articles.remove(article)
-        return None
-
-    def get_articles(self):
-        return self.json()

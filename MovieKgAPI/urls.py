@@ -22,6 +22,6 @@ urlpatterns = [
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
     path('api/v1/subject/', include('Subject.urls')),
-    path('api/v1/', include('User.new_urls')),
-    url(r'^silk/', include('silk.urls', namespace='silk')),
+    path('api/v1/', include('User.urls')),
+    # url(r'^silk/', include('silk.urls', namespace='silk')),
 ]
