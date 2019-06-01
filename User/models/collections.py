@@ -1,10 +1,7 @@
 from django.db import models
 
-from MovieKgAPI.settings.base import AUTH_USER_MODEL
-from User.models.article import Article
 
-
-class Favorites(models.Model):
+class Collection(models.Model):
     id = models.AutoField(verbose_name='收藏夹编号', primary_key=True)
     name = models.CharField(verbose_name='收藏夹名称', max_length=240)
     user = models.ForeignKey(verbose_name='主人', to='User.User', on_delete=models.PROTECT)

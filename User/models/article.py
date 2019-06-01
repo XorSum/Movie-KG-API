@@ -4,7 +4,7 @@ from utils import utils
 
 
 class Article(models.Model):
-    post_id = models.AutoField(primary_key=True, verbose_name='推文编号', editable=False)
+    id = models.AutoField(primary_key=True, verbose_name='推文编号', editable=False)
     content = models.CharField(verbose_name='内容', max_length=240)
     created_date = models.DateTimeField(verbose_name='创建日期', auto_now_add=True)
     user = models.ForeignKey(verbose_name='发表用户', to='User.User', on_delete=models.PROTECT)
@@ -14,9 +14,9 @@ class Article(models.Model):
 
     def json(self):
         return {
-            'post_id': self.post_id,
+            'article_id': self.id,
             'content': self.content,
-            'date': self.created_date,
+            'created_date': self.created_date,
             'user': self.user.username,
             'movie': utils.get_json_or_none(self.movie),
             'person': utils.get_json_or_none(self.person)

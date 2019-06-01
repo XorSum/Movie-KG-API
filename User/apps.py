@@ -6,7 +6,7 @@ class UsersConfig(AppConfig):
 
     def ready(self):
         from User.models import Article
-        from User.models import Favorites
-        from User.models import ReadHistory
+        from User.models import Collection
+        from User.models import History
         from User.models import User
         from User.models import UserManager
