@@ -3,3 +3,4 @@ mysqlclient==1.4.2.post1
 PyJWT==1.7.1
 pytz==2019.1
 sqlparse==0.3.0
+uWSGI==2.0.18
