@@ -29,7 +29,7 @@ class NotImplement(Exception):
     pass
 
 
-def json_response(data, status, token='', detail=''):
+def json_response(data, status, token='', detail='',start=0,end=0,total=0):
     if status not in __INFO:
         raise NotImplement
     return JsonResponse({
@@ -39,5 +39,10 @@ def json_response(data, status, token='', detail=''):
             'message': __INFO[status]['message'],
             'detail': __INFO[status]['detail'] if detail == '' else detail,
         },
-        'token': token
+        'token': token,
+        'page': {
+            'start': start,
+            'end': end,
+            'total': total
+        }
     })

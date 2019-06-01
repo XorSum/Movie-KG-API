@@ -91,10 +91,12 @@ def unfollow(requests, followee_name):
 
 def user_list_followees(requests, username):
     user = get_object_or_404(User, username=username)
+    start = max(int(requests.GET.get('start', 0)), 0)
+    end = min(int(requests.GET.get('end', start + 20)), start + 20)
     logging.info('username=%s' % (username))
-    rep = [i.json() for i in user.following.all()]
-
-    return json_response(rep, 200)
+    total = user.following.count()
+    rep = [i.json() for i in user.following.all()[start:end]]
+    return json_response(rep, 200,start=start,end=end,total=total)
 
 
 def user_list_followers(requests, username):
@@ -103,6 +105,9 @@ def user_list_followers(requests, username):
     :return:
     """
     user = get_object_or_404(User, username=username)
+    start = max(int(requests.GET.get('start', 0)), 0)
+    end = min(int(requests.GET.get('end', start + 20)), start + 20)
     logging.info('username=%s' % (username))
-    rep = [i.json() for i in User.objects.filter(following=user).all()]
-    return json_response(rep, 200)
+    total = User.objects.filter(following=user).count()
+    rep = [i.json() for i in User.objects.filter(following=user).all()[start:end]]
+    return json_response(rep, 200,start=start,end=end,total=total)

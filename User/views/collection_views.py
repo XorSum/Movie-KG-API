@@ -45,10 +45,15 @@ def collection_delete_article(requests, article_id, collection_id):
 @login_required
 def collection_list_article(requests, collection_id):
     try:
+        start = max(int(requests.GET.get('start', 0)), 0)
+        end = min(int(requests.GET.get('end', start + 20)), start + 20)
         collection = Collection.objects.get(id=collection_id)
         if collection.private == True and requests.GET['user'] != collection.user:
             return json_response(None, 400)
-        return json_response(collection.json(show_articles=True), 200)
+        total = collection.articles.count()
+        articles = collection.articles.all()[start:end]
+        rep = [each.json() for each in articles]
+        return json_response(rep, 200,start=start,end=end,total=total)
     except:
         return json_response(None, 400)
 
