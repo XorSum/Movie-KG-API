@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from User.models import User
 from utils.JWT import encode, login_required
 from utils.json_response import json_response
+from utils.page_range import get_range
 
 
 def get_user_or_none(user):
@@ -91,8 +92,7 @@ def unfollow(requests, followee_name):
 
 def user_list_followees(requests, username):
     user = get_object_or_404(User, username=username)
-    start = max(int(requests.GET.get('start', 0)), 0)
-    end = min(int(requests.GET.get('end', start + 20)), start + 20)
+    start,end = get_range(requests)
     logging.info('username=%s' % (username))
     total = user.following.count()
     rep = [i.json() for i in user.following.all()[start:end]]
@@ -105,8 +105,7 @@ def user_list_followers(requests, username):
     :return:
     """
     user = get_object_or_404(User, username=username)
-    start = max(int(requests.GET.get('start', 0)), 0)
-    end = min(int(requests.GET.get('end', start + 20)), start + 20)
+    start,end = get_range(requests)
     logging.info('username=%s' % (username))
     total = User.objects.filter(following=user).count()
     rep = [i.json() for i in User.objects.filter(following=user).all()[start:end]]

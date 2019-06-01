@@ -13,47 +13,47 @@
 #### User
 
 ```plain
-path('login/', User.views.user_views.user_login, name='api.login'),
+api/v1/login/ 
 # POST  params: username, password
-path('join/', User.views.user_views.user_join, name='api.join'),
+api/v1/join/ 
 # POST    params: username, nickname, password
 
-path('follow/<str:followee_name>/', User.views.user_views.follow, name='api.follow'),
+api/v1/follow/<str:followee_name>/ 
 # POST 关注某人　params: token, followee_name
-path('unfollow/<str:followee_name>/', User.views.user_views.unfollow, name='api.follow'),
+api/v1/unfollow/<str:followee_name>/ 
 # POST 取关某人　params: token, followee_name
-path('user/<str:username>/followees/', User.views.user_views.user_list_followees),
-# 获取追随某人的人, GET , params: username
-path('user/<str:username>/followees/', User.views.user_views.user_list_followers),
-# 获取某人追随的人, GET , params: username
+api/v1/user/<str:username>/followees/ 
+# 获取追随某人的人, GET , params: username, start, end
+api/v1/user/<str:username>/followees/ 
+# 获取某人追随的人, GET , params: username, start, end
 
-path('feeds/', User.views.article_views.user_pull_feeds),
-# 获取feeds GET   params: token, lower,upper
-path('article/', User.views.article_views.user_publish_article),
-# 发表文章 POST   params: content , token
-path('user/<username>/articles/', User.views.article_views.user_list_article),
-# 获取某人的文章 GET params: username,lower,upper
+api/v1/feeds/ 
+# 获取feeds GET   params: token, start, end
+api/v1/article/ 
+# 发表文章 POST   params: content , token, 可选参数: article_id,person_id
+api/v1/user/<username>/articles/ 
+# 获取某人的文章 GET params: username, start, end
 
-path('collection/', User.views.collection_views.user_create_collection),
+api/v1/collection/ 
 # 创建收藏夹  POST   params: name,private, token
-path('collections/', User.views.collection_views.user_list_all_collection),
+api/v1/collections/ 
 # 获取自己的所有的收藏夹列表 GET params: token
-path('user/<str:username>/collections/', User.views.collection_views.user_list_public_collection),
+api/v1/user/<str:username>/collections/ 
 # 获取某人公开的收藏夹列表 GET params: token
-path('collection/<int:collection_id>/', User.views.collection_views.collection_list_article),
-# 获取某个收藏夹中的文章 GET params: collection_id,token
-path('article/<int:article_id>/which_collections/', User.views.collection_views.article_in_which_collections),
+api/v1/collection/<int:collection_id>/ 
+# 获取某个收藏夹中的文章 GET params: collection_id,token, start, end
+api/v1/article/<int:article_id>/which_collections/ 
 # 查看某文章被我收藏在哪些收藏夹里 GET, params: article_id, token
-path('article/<int:article_id>/collect/<int:collection_id>/', User.views.collection_views.collection_add_article),
+api/v1/article/<int:article_id>/collect/<int:collection_id>/ 
 # 收藏文章 POST params: article_id, collection_id, token
-path('article/<int:article_id>/uncollect/<int:collection_id>/',
+api/v1/article/<int:article_id>/uncollect/<int:collection_id>/ 
      User.views.collection_views.collection_delete_article),
 # 取消收藏文章 DELETE params: article_id, collection_id, token
 
-path('read/<int:article_id>/', User.views.article_views.user_read_article),
+api/v1/read/<int:article_id>/ 
 # 增加阅读记录 POST ,params: article_id, token
-path('history/', User.views.article_views.user_history_article),
-# 获取我的阅读记录 GET ,params:  token
+api/v1/history/ 
+# 获取我的阅读记录 GET ,params:  token, start, end
     
 ```
 

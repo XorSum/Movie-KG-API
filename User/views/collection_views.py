@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from User.models import Article, Collection, User
 from utils.JWT import login_required
 from utils.json_response import json_response
+from utils.page_range import get_range
 
 
 @login_required
@@ -45,8 +46,7 @@ def collection_delete_article(requests, article_id, collection_id):
 @login_required
 def collection_list_article(requests, collection_id):
     try:
-        start = max(int(requests.GET.get('start', 0)), 0)
-        end = min(int(requests.GET.get('end', start + 20)), start + 20)
+        start,end = get_range(requests)
         collection = Collection.objects.get(id=collection_id)
         if collection.private == True and requests.GET['user'] != collection.user:
             return json_response(None, 400)

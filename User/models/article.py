@@ -13,14 +13,21 @@ class Article(models.Model):
                                blank=True)
 
     def json(self):
-        return {
+        data = {
             'article_id': self.id,
             'content': self.content,
             'created_date': self.created_date,
-            'user': self.user.username,
-            'movie': utils.get_json_or_none(self.movie),
-            'person': utils.get_json_or_none(self.person)
+            'user': self.user.username
         }
+        if self.movie:
+            data['movie'] = self.movie.json(show_all=True)
+        else :
+            data['movie'] = None
+        if self.person:
+            data['person'] = self.person.json(show_all=True)
+        else:
+            data['person'] = None
+        return data
 
     class Meta:
         verbose_name = '动态'

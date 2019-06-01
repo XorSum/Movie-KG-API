@@ -22,7 +22,7 @@ urlpatterns = [
     path('feeds/', User.views.article_views.user_pull_feeds),  # pagable
     # 获取feeds GET   params: token, start, end
     path('article/', User.views.article_views.user_publish_article),
-    # 发表文章 POST   params: content , token
+    # 发表文章 POST   params: content , token, 可选参数: article_id,person_id
     path('user/<username>/articles/', User.views.article_views.user_list_article),  # pagable
     # 获取某人的文章 GET params: username, start, end
 
