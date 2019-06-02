@@ -61,8 +61,8 @@ def collection_list_article(requests, collection_id):
 @login_required
 def user_create_collection(requests):
     if requests.method == 'POST':
-        name = requests.GET.get('name', None)
-        private = requests.GET.get('private', None)
+        name = requests.POST.get('name', None)
+        private = requests.POST.get('private', None)
         if name == None or private == None:
             return json_response(None, 400)
         collection = Collection.objects.create(user=requests.GET['user'], name=name, private=private)
